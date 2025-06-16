@@ -27,10 +27,6 @@ db.sqlite3
 # File di migrazioni compilati
 **/__pycache__/
 
-# Django static/media files
-/static/
-/media/
-
 # File temporanei
 *.tmp
 *.bak
