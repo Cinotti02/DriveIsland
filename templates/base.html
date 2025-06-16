@@ -42,8 +42,10 @@
 <body>
 <div class="page_loader"></div>
 
-{% include 'includes/topbar.html' %}
-{% include 'includes/navbar.html' %}
+{% if not request.path == '/users/login/' and not request.path == '/users/signup/' %}
+    {% include 'includes/topbar.html' %}
+    {% include 'includes/navbar.html' %}
+{% endif %}
 
 {% block content %}
 
