@@ -1,0 +1,38 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg
+*.egg-info/
+*.pyo
+*.pyd
+*.pdb
+*.log
+
+# Virtualenv
+.venv/
+env/
+venv/
+
+# VSCode / PyCharm / IDE vari
+.vscode/
+.idea/
+
+# File di sistema
+.DS_Store
+Thumbs.db
+
+# SQLite database (se usi sqlite)
+db.sqlite3
+
+# File di migrazioni compilati
+**/__pycache__/
+
+# Django static/media files
+/static/
+/media/
+
+# File temporanei
+*.tmp
+*.bak
+*.swp
+*~
