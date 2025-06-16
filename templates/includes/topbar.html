@@ -10,12 +10,21 @@
             </div>
             <div class="col-lg-4 col-md-4 col-sm-5">
                 <ul class="top-social-media pull-right">
-                    <li>
-                        <a href="login.html" class="sign-in"><i class="fa fa-sign-in"></i> Login</a>
-                    </li>
-                    <li>
-                        <a href="signup.html" class="sign-in"><i class="fa fa-user"></i> Register</a>
-                    </li>
+                    {% if user.is_authenticated %}
+                        <li>
+                            <a href="#" class="sign-in"><i class="fa fa-user"></i> Ciao, {{ user.username }}</a>
+                        </li>
+                        <li>
+                            <a href="{% url 'logout' %}" class="sign-in"><i class="fa fa-sign-out"></i> Logout</a>
+                        </li>
+                    {% else %}
+                        <li>
+                            <a href="{% url 'login' %}" class="sign-in"><i class="fa fa-sign-in"></i> Login</a>
+                        </li>
+                        <li>
+                            <a href="{% url 'signup' %}" class="sign-in"><i class="fa fa-user"></i> Register</a>
+                        </li>
+                    {% endif %}
                 </ul>
             </div>
         </div>

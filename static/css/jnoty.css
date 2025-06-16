@@ -70,8 +70,8 @@
 
 .jnoty-container {
     background-color: #fff;
-    filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=(0.9*100));
-    -ms-filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=(0.9*100));
+    filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=90);
+    -ms-filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=90);
     zoom: 1;
     width: 350px;
     padding: 10px;
@@ -111,8 +111,8 @@
 .jnoty-closer {
     background-color: #fff;
     opacity: 0.9;
-    filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=(0.9*100));
-    -ms-filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=(0.9*100));
+    filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=90);
+    -ms-filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=90);
     zoom: 1;
     width: 250px;
     padding: 10px;
