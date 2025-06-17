@@ -1,13 +1,22 @@
 from django.shortcuts import render
 from django.core.paginator import Paginator
 from pages.models import Team
-from cars.models import Car
+from cars.models import Car, Category
 
 
 # Create your views here.
 def home(request):
     team = Team.objects.all()
-    return render(request, 'pages/home.html', {'team': team})
+    car = Car.objects.all()
+    categories = Category.objects.all()
+    return render(request, 'pages/home.html', {
+        'team': team,
+        'categories': categories,
+        'cars': cars,
+        'models': Car.objects.values_list('model', flat=True).distinct(),
+        'locations': dict(Car.LOCATION_CHOICES),
+        'gearboxes': dict(Car.GEARBOX_CHOICES),
+    })
 
 def cars(request):
     car = Car.objects.all()

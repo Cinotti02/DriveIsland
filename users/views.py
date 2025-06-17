@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, logout
-from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+from django.contrib.auth.forms import AuthenticationForm
+from .forms import CustomUserCreationForm
 from django.contrib import messages
 
 def login_view(request):
@@ -10,20 +11,22 @@ def login_view(request):
             user = form.get_user()
             login(request, user)
             return redirect('home')  # o altra pagina
+        else:
+            messages.error(request, 'Username o password non validi.')
     else:
         form = AuthenticationForm()
     return render(request, 'users/login.html', {'form': form})
 
 def register_view(request):
     if request.method == 'POST':
-        form = UserCreationForm(request.POST)
+        form = CustomUserCreationForm(request.POST)
         if form.is_valid():
             user = form.save()
             login(request, user)
             messages.success(request, 'Registrazione completata con successo!')
             return redirect('home')
     else:
-        form = UserCreationForm()
+        form = CustomUserCreationForm()
     return render(request, 'users/signup.html', {'form': form})
 
 def logout_view(request):

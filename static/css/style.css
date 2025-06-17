@@ -9723,10 +9723,13 @@ table {
         top: 0px !important;
     }
 }
+input, textarea {
+  color: #000000;
+}
 
-input, input::-webkit-input-placeholder, textarea::-webkit-input-placeholder{
+input::-webkit-input-placeholder, textarea::-webkit-input-placeholder{
     font-size: 14px;
-    color: #000000 !important;
+    color: #c6c4c4 !important;
 }
 .form-control:disabled, .form-control[readonly]{
     font-size: 14px;
