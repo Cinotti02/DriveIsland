@@ -16,33 +16,35 @@
                         </a>
                     </div>
                     <h3>Create an account</h3>
+
                     {% if form.errors %}
                         <div class="alert alert-danger">{{ form.errors }}</div>
                     {% endif %}
-                    <form method="POST" action="{% url 'login' %}" autocomplete="off">
+
+                    <form method="POST" action="{% url 'signup' %}" autocomplete="off">
                     {% csrf_token %}
                         <div class="form-group form-box">
-                            <input type="text" name="firstname" class="input-text" placeholder="First Name">
+                            <input type="text" name="first_name" class="input-text" placeholder="First Name" value="{{ form.first_name.value|default_if_none:'' }}">
                             <i class="fa fa-user"></i>
                         </div>
                         <div class="form-group form-box">
-                            <input type="text" name="lastname" class="input-text" placeholder="Last Name">
+                            <input type="text" name="last_name" class="input-text" placeholder="Last Name" value="{{ form.last_name.value|default_if_none:'' }}">
                             <i class="fa fa-user"></i>
                         </div>
                         <div class="form-group form-box">
-                            <input type="text" name="username" class="input-text" placeholder="Username">
+                            <input type="text" name="username" class="input-text" placeholder="Username" value="{{ form.username.value|default_if_none:'' }}">
                             <i class="fa fa-user"></i>
                         </div>
                         <div class="form-group form-box">
-                            <input type="email" name="email" class="input-text" placeholder="Email Address">
+                            <input type="email" name="email" class="input-text" placeholder="Email Address" value="{{ form.email.value|default_if_none:'' }}">
                             <i class="flaticon-mail"></i>
                         </div>
                         <div class="form-group form-box">
-                            <input type="password" name="password" class="input-text" placeholder="Password">
+                            <input type="password" name="password1" class="input-text" placeholder="Password">
                             <i class="flaticon-lock"></i>
                         </div>
                         <div class="form-group form-box">
-                            <input type="password" name="confirm_password" class="input-text" placeholder="Confirm Password">
+                            <input type="password" name="password2" class="input-text" placeholder="Confirm Password">
                             <i class="flaticon-lock"></i>
                         </div>
                         <div class="form-group mb-0 clearfix">
