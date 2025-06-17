@@ -9729,7 +9729,7 @@ input, textarea {
 
 input::-webkit-input-placeholder, textarea::-webkit-input-placeholder{
     font-size: 14px;
-    color: #c6c4c4 !important;
+    color: #000000 !important;
 }
 .form-control:disabled, .form-control[readonly]{
     font-size: 14px;
