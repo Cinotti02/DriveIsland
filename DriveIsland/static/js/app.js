@@ -102,25 +102,27 @@ $(function () {
     function adjustHeader()
     {
         var windowWidth = $(window).width();
+        var scrollTop = $(document).scrollTop();
+
         if(windowWidth > 0) {
-            if ($(document).scrollTop() >= 100) {
-                if($('.header-shrink').length < 1) {
+            if (scrollTop >= 100) {
+                if (!$('.sticky-header').hasClass('header-shrink')) {
                     $('.sticky-header').addClass('header-shrink');
                 }
                 if($('.do-sticky').length < 1) {
-                    $('.company-logo img').attr('src', 'static/img/lChat_logo.png');
+                    $('.company-logo img').attr('src', logoScrolled);
                 }
             }
             else {
                 $('.sticky-header').removeClass('header-shrink');
                 if($('.do-sticky').length < 1 && $('.fixed-header').length == 0 && $('.fixed-header2').length == 0) {
-                    $('.company-logo img').attr('src', 'static/img/Chat_logo.png');
+                    $('.company-logo img').attr('src', logoDefault);
                 } else {
-                    $('.company-logo img').attr('src', 'static/img/Chat_logo.png');
+                    $('.company-logo img').attr('src', logoDefault);
                 }
             }
         } else {
-            $('.company-logo img').attr('src', 'static/img/logos/black-logo.png');
+            $('.company-logo img').attr('src', logoDefault);
         }
     }
 
