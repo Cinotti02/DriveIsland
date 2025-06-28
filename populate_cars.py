@@ -11,7 +11,7 @@ sys.path.insert(0, str(BASE_DIR))  # ✅ Aggiunto per far trovare le app
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "DriveIsland.settings")  # Cambia se il tuo progetto ha un nome diverso
 django.setup()
 
-from cars.models import Car
+from cars.models import Car, Category
 
 # Percorso assoluto dell’immagine esistente
 image_path = Path(__file__).resolve().parent / 'media/cars/audi-a4-avant/0b9d469c-479f-4142-a3db-6ba38e9ec739.jpg'
@@ -30,6 +30,7 @@ with open(image_path, 'rb') as img_file:
             price_per_day=42.00,
             fuel_type="diesel",
             gearbox="manuale",
+            category=Category.objects.get(name="SUV"),
             air_conditioning=True,
             color="Blu"
         )
@@ -42,6 +43,7 @@ with open(image_path, 'rb') as img_file:
             price_per_day=48.00,
             fuel_type="benzina",
             gearbox="manuale",
+            category=Category.objects.get(name="Decappottabile"),
             air_conditioning=True,
             color="Nero"
         )
@@ -49,13 +51,63 @@ with open(image_path, 'rb') as img_file:
     # Auto 6
     with open(image_path, 'rb') as f6:
         Car.objects.create(
-            model="Renault Clio E-Tech",
+            model="Panda 1.2",
             image_principal=File(f6, name='yaris.jpg'),
             price_per_day=45.00,
             fuel_type="ibrido",
             gearbox="automatico",
+            category=Category.objects.get(name="Berlina"),
             air_conditioning=True,
             color="Rosso metallizzato"
         )
+
+    with open(image_path, 'rb') as f7:
+        Car.objects.create(
+            model="Lamborghini",
+            image_principal=File(f7, name='yaris.jpg'),
+            price_per_day=45.00,
+            fuel_type="ibrido",
+            gearbox="automatico",
+            category=Category.objects.get(name="Berlina"),
+            air_conditioning=True,
+            color="Rosso metallizzato"
+        )
+
+    with open(image_path, 'rb') as f8:
+        Car.objects.create(
+            model="Mehary",
+            image_principal=File(f8, name='yaris.jpg'),
+            price_per_day=45.00,
+            fuel_type="ibrido",
+            gearbox="automatico",
+            category=Category.objects.get(name="Berlina"),
+            air_conditioning=True,
+            color="Rosso metallizzato"
+        )
+
+    with open(image_path, 'rb') as f9:
+        Car.objects.create(
+            model="Mehary",
+            image_principal=File(f9, name='yaris.jpg'),
+            price_per_day=45.00,
+            fuel_type="ibrido",
+            gearbox="automatico",
+            category=Category.objects.get(name="Berlina"),
+            air_conditioning=True,
+            color="Rosso metallizzato"
+        )
+
+    with open(image_path, 'rb') as f10:
+        Car.objects.create(
+            model="Mehary",
+            image_principal=File(f10, name='yaris.jpg'),
+            price_per_day=45.00,
+            fuel_type="ibrido",
+            gearbox="automatico",
+            category=Category.objects.get(name="Berlina"),
+            air_conditioning=True,
+            color="Rosso metallizzato"
+        )
+
 
 print("✅ Auto inserite con successo!")
