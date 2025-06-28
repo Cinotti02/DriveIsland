@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+{% load static %}
+
+<!-- Sub banner start -->
+<div class="sub-banner overview-bgi">
+    <div class="container breadcrumb-area">
+        <div class="breadcrumb-areas">
+            <h1>Dashboard</h1>
+            <ul class="breadcrumbs">
+                <li><a href="{% url 'home' %}">Home</a></li>
+                <li class="active">Username</li>
+            </ul>
+        </div>
+    </div>
+</div>
+<!-- Sub Banner end -->
+
+<!--   Dashboard Start   -->
+
+<div class="container mt-50 mb-50">
+	<div class="main-title" style="text-align:left !important;">
+            <h1>Welcome <span>{{ user.username }}</span></h1>
+            <p>Here are the cars that you have inquired about</p>
+        </div>
+	<table class="table table-hover">
+	  <thead>
+		<tr>
+		  <th scope="col">#</th>
+		  <th scope="col">Car Name</th>
+		  <th scope="col">Pick-up location</th>
+		  <th scope="col">Price</th>
+		  <th scope="col">Action</th>
+		</tr>
+	  </thead>
+	  <tbody>
+      {% for booking in bookings %}
+		<tr>
+		  <th scope="row">{{ forloop.counter }}</th>
+		  <td>{{ booking.car }}</td>
+		  <td>{{ booking.car.get_location_display }}</td>
+		  <td>{{ booking.total_price|floatformat:2 }}€</td>
+		  <td><a href="#" class="btn btn-outline-dark">View Car</a></td>
+		</tr>
+        {% empty %}
+          <tr>
+              <td colspan="5">Nessuna prenotazione trovata.</td>
+          </tr>
+        {% endfor %}
+	  </tbody>
+	</table>
+
+    <form method="POST" action="{% url 'dashboard' %}">
+        {% csrf_token %}
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                {{ form.first_name.label_tag }}
+                {{ form.first_name }}
+            </div>
+            <div class="col-md-6 mb-3">
+                {{ form.last_name.label_tag }}
+                {{ form.last_name }}
+            </div>
+            <div class="col-md-6 mb-3">
+                {{ form.email.label_tag }}
+                {{ form.email }}
+            </div>
+            <div class="col-md-6 mb-3">
+                {{ form.phone_number.label_tag }}
+                {{ form.phone_number }}
+            </div>
+            <div class="col-md-6 mb-3">
+                {{ form.date_of_birth.label_tag }}
+                {{ form.date_of_birth }}
+            </div>
+        </div>
+        <button type="submit" class="btn btn-success">Salva modifiche</button>
+    </form>
+</div>
+<!--   Dashboard End   -->
+
+{% endblock content %}
