@@ -58,15 +58,3 @@ class CarImage(models.Model):
 
     def __str__(self):
         return f"Image for {self.car.model}"
-
-
-class Booking(models.Model):
-    car = models.ForeignKey(Car, related_name='bookings', on_delete=models.CASCADE)
-    customer_name = models.CharField(max_length=255)
-    customer_email = models.EmailField()
-    start_date = models.DateField()
-    end_date = models.DateField()
-    created_at = models.DateTimeField(auto_now_add=True)
-
-    def __str__(self):
-        return f"{self.customer_name} - {self.car.model} ({self.start_date} → {self.end_date})"

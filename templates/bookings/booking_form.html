@@ -1,0 +1,103 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <!-- Sub banner start -->
+<div class="sub-banner overview-bgi">
+    <div class="container breadcrumb-area">
+        <div class="breadcrumb-areas">
+            <h1>About Us</h1>
+            <ul class="breadcrumbs">
+                <li><a href="{% url 'home' %}">Home</a></li>
+                <li class="active">About Us</li>
+            </ul>
+        </div>
+    </div>
+</div>
+<!-- Sub Banner end -->
+
+<div class="container mt-5 mb-5" style="justify-content: center; align-items: center; display: flex" >
+    <div>
+        <h2 class="mb-4">Book a Car</h2>
+        <form method="post" action="{% url 'create_booking' %}">
+            {% csrf_token %}
+            {% if form.non_field_errors %}
+                <div class="alert alert-danger">
+                    {% for error in form.non_field_errors %}
+                        <p>{{ error }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+            <div class="form-group">
+                <label for="id_car">Auto</label>
+                <select name="car" id="id_car" class="form-control">
+                    {% for car in form.fields.car.queryset %}
+                        <option value="{{ car.id }}" data-price="{{ car.price_per_day }}"
+                            {% if form.initial.car|stringformat:"s" == car.id|stringformat:"s" %}selected{% endif %}>
+                            {{ car }}
+                        </option>
+                    {% endfor %}
+                </select>
+                {% if form.car.errors %}
+                    <div class="text-danger">{{ form.car.errors.0 }}</div>
+                {% endif %}
+            </div>
+            <div class="form-group">
+                <label for="id_start_date">Data inizio</label>
+                {{ form.start_date }}
+                {% if form.start_date.errors %}
+                    <div class="text-danger">{{ form.start_date.errors.0 }}</div>
+                {% endif %}
+            </div>
+            <div class="form-group">
+                <label for="id_end_date">Data fine</label>
+                {{ form.end_date }}
+                {% if form.end_date.errors %}
+                    <div class="text-danger">{{ form.end_date.errors.0 }}</div>
+                {% endif %}
+            </div>
+            <p>
+                <strong>Prezzo totale stimato:</strong>
+                <span id="price-preview">—</span>
+            </p>
+            <button type="submit" class="btn btn-primary">Prenota</button>
+        </form>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const carSelect = document.getElementById('id_car');
+    const startDate = document.getElementById('id_start_date');
+    const endDate = document.getElementById('id_end_date');
+    const pricePreview = document.getElementById('price-preview');
+
+    function calculatePrice() {
+        const carOption = carSelect.options[carSelect.selectedIndex];
+        const pricePerDay = parseFloat(carOption.dataset.price);
+        const start = new Date(startDate.value);
+        const end = new Date(endDate.value);
+
+        if (!isNaN(start) && !isNaN(end) && !isNaN(pricePerDay)) {
+            const timeDiff = end - start;
+            const days = Math.floor(timeDiff / (1000 * 60 * 60 * 24)) + 1;
+
+            if (days > 0) {
+                const total = (days * pricePerDay).toFixed(2);
+                pricePreview.textContent = `€ ${total}`;
+            } else {
+                pricePreview.textContent = '—';
+            }
+        } else {
+            pricePreview.textContent = '—';
+        }
+    }
+
+    [carSelect, startDate, endDate].forEach(elem => {
+        elem.addEventListener('change', calculatePrice);
+        elem.addEventListener('input', calculatePrice);
+    });
+
+    calculatePrice(); // Calcolo iniziale
+});
+</script>
+{% endblock %}

@@ -1,10 +1,12 @@
 {% load static %}
 
-<header class="main-header sticky-header header-with-top">
+{% block content %}
+
+<div class="main-header sticky-header header-with-top">
     <div class="container">
         <nav class="navbar navbar-expand-lg navbar-light">
             <a class="navbar-brand company-logo" href="{% url 'home' %}">
-                <img src="{% static 'img/Chat_logo.png' %}" alt="logo">
+                <img src="{% static 'img/Chat_logo.png' %}" alt="logo" class="logo-img" style="height: 50px;">
             </a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="fa fa-bars"></span>
@@ -49,4 +51,10 @@
             </div>
         </nav>
     </div>
-</header>
+</div>
+{% endblock content %}
+
+<script>
+  const logoDefault = "{% static 'img/Chat_logo.png' %}";
+  const logoScrolled = "{% static 'img/Chat_logo-scrolled.png' %}"; // opzionale
+</script>

@@ -8861,7 +8861,7 @@ table {
         line-height: 22px;
         font-size: 14px;
         max-width: 90%;
-        margin: 0px auto;
+        margin: 0 auto;
         margin-bottom: 5px;
     }
 
@@ -9684,7 +9684,7 @@ table {
 
     .search-options-btn, .search-options-btn:hover {
         left: 30px;
-        bottom: 0px;
+        bottom: 0;
     }
 
     .setting-button {
@@ -9720,14 +9720,18 @@ table {
         -ms-transition: 0.5s;
         transition: 0.5s;
         box-shadow: 0 0 5px rgba(0, 0, 0, .1);
-        top: 0px !important;
+        top: 0 !important;
     }
 }
-
-
-input::-webkit-input-placeholder, textarea::-webkit-input-placeholder{
+input, textarea {
     font-size: 14px;
-    color: #000000 !important;
+    color: #000000;
+}
+
+input::placeholder, textarea::placeholder, input::-webkit-input-placeholder,
+textarea::-webkit-input-placeholder, input:-ms-input-placeholder, textarea:-ms-input-placeholder {
+    color: #c6c4c4 !important;
+    font-size: 14px;
 }
 .form-control:disabled, .form-control[readonly]{
     font-size: 14px;

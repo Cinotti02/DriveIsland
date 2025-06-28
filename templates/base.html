@@ -42,7 +42,7 @@
 <body>
 <div class="page_loader"></div>
 
-{% if not request.path == '/users/login/' and not request.path == '/users/signup/' %}
+{% if request.resolver_match.url_name != 'login' and request.resolver_match.url_name != 'signup' and request.resolver_match.url_name != 'bookings_success' and request.resolver_match.url_name != 'edit_car' %}
     {% include 'includes/topbar.html' %}
     {% include 'includes/navbar.html' %}
 {% endif %}
@@ -61,8 +61,9 @@
     </form>
 </div>
 
-
-{% include 'includes/footer.html' %}
+{% if request.resolver_match.url_name != 'edit_car' and request.resolver_match.url_name != 'booking_success' %}
+    {% include 'includes/footer.html' %}
+{% endif %}
 
 <script src="{% static 'js/jquery-2.2.0.min.js'%}"></script>
 <script src="{% static 'js/popper.min.js'%}"></script>
