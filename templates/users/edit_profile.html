@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+
+{% block content %}
+{% load static %}
+
+<!-- Sub banner start -->
+<div class="sub-banner overview-bgi">
+    <div class="container breadcrumb-area">
+        <div class="breadcrumb-areas">
+            <h1>Modifica Profilo</h1>
+            <ul class="breadcrumbs">
+                <li><a href="{% url 'home' %}">Home</a></li>
+                <li class="active">Modifica Profilo</li>
+            </ul>
+        </div>
+    </div>
+</div>
+<!-- Sub Banner end -->
+
+<div class="container mt-5 mb-5">
+    <div class="main-title">
+        <h2>Gestione del Profilo</h2>
+        <p>Aggiorna le informazioni del tuo account oppure elimina il tuo profilo in modo permanente.</p>
+    </div>
+
+    <form method="POST" action="{% url 'edit_profile' %}" class="mt-4">
+        {% csrf_token %}
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                {{ form.first_name.label_tag }}
+                {{ form.first_name }}
+            </div>
+            <div class="col-md-6 mb-3">
+                {{ form.last_name.label_tag }}
+                {{ form.last_name }}
+            </div>
+            <div class="col-md-6 mb-3">
+                {{ form.phone_number.label_tag }}
+                {{ form.phone_number }}
+            </div>
+            <div class="col-md-6 mb-3">
+                {{ form.date_of_birth.label_tag }}
+                {{ form.date_of_birth }}
+            </div>
+        </div>
+        <button type="submit" class="btn btn-success d-block mx-auto">Salva modifiche</button>
+    </form>
+
+    <hr class="my-5">
+
+    <div class="text-center">
+        <h4 class="text-danger">Elimina il tuo account</h4>
+        <p>Se desideri rimuovere il tuo account, puoi farlo cliccando il pulsante qui sotto. <strong>Questa azione non può essere annullata.</strong></p>
+        <form method="POST" action="{% url 'edit_profile' %}" onsubmit="return confirm('Sei sicuro di voler eliminare il tuo account? Questa azione è permanente.');">
+            {% csrf_token %}
+            <button type="submit" name="delete_account" class="btn btn-outline-danger">
+                Elimina il mio account</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

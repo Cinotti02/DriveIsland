@@ -41,6 +41,16 @@
                             Contact
                         </a>
                     </li>
+                    {% if is_admin %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'admin_inbox' %}">
+                            Messaggi
+                            {% if unread_messages > 0 %}
+                                <span class="badge badge-danger">{{ unread_messages }}</span>
+                            {% endif %}
+                        </a>
+                    </li>
+                    {% endif %}
 
                     <li class="nav-item dropdown m-hide">
                         <a href="#full-page-search" class="nav-link h-icon">
