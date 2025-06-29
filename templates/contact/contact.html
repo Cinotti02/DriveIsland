@@ -27,9 +27,18 @@
             <p>Compila il modulo per inviarci un messaggio</p>
         </div>
 
-        {% for message in messages %}
-            <div class="alert alert-success">{{ message }}</div>
-        {% endfor %}
+
+
+        {% if messages %}
+            {% for message in messages %}
+                {% if "admin_reply" not in message.tags %}
+                    <div class="alert {% if message.message == "Il tuo messaggio è stato inviato con successo!" %} alert-success {% else %} alert-danger {% endif %}">
+                        {{ message }}
+                    </div>
+                {% endif %}
+            {% endfor %}
+          {% endif %}
+    <br>
 
         <form method="POST" enctype="multipart/form-data">
             {% csrf_token %}
@@ -64,6 +73,7 @@
                             <div class="form-group message">
                                 {{ form.message }}
                                 {{ form.message.errors }}
+                                <small id="charCount" class="form-text text-muted">Minimo 10 caratteri.</small>
                             </div>
                         </div>
                         <div class="col-md-12">
@@ -119,4 +129,27 @@
 </div>
 <!-- Contact 2 end -->
 
-{% endblock %}
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const messageField = document.getElementById("id_message");
+    const charCount = document.getElementById("charCount");
+
+    if (messageField && charCount) {
+        messageField.addEventListener("input", function () {
+            const length = messageField.value.trim().length;
+
+            if (length < 10) {
+                charCount.textContent = `⚠️ Hai scritto solo ${length} caratteri. Minimo 10 richiesti.`;
+                charCount.classList.remove("text-muted", "text-success");
+                charCount.classList.add("text-danger");
+            } else {
+                charCount.textContent = `✅ ${length} caratteri scritti.`;
+                charCount.classList.remove("text-muted", "text-danger");
+                charCount.classList.add("text-success");
+            }
+        });
+    }
+});
+</script>
+
+{% endblock content %}

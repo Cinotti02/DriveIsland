@@ -32,3 +32,6 @@ db.sqlite3
 *.bak
 *.swp
 *~
+
+# File ambiente
+.env

@@ -61,7 +61,7 @@
     </form>
 </div>
 
-{% if request.resolver_match.url_name != 'edit_car' and request.resolver_match.url_name != 'booking_success' %}
+{% if request.resolver_match.url_name != 'edit_car' and request.resolver_match.url_name != 'booking_success' and request.resolver_match.url_name != 'signup' %}
     {% include 'includes/footer.html' %}
 {% endif %}
 

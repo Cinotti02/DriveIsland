@@ -35,6 +35,7 @@ class ContactForm(forms.ModelForm):
             'placeholder': 'Write your message'
         })
 
+
         # Se l'utente è loggato: precompila e blocca
         if user and getattr(user, 'is_authenticated', False):
             full_name = f"{getattr(user, 'first_name', '')} {getattr(user, 'last_name', '')}".strip()
@@ -47,7 +48,7 @@ class ContactForm(forms.ModelForm):
             self.fields['phone'].disabled = True
 
     def clean_message(self):
-        data = self.cleaned_data['message']
-        if len(data.strip()) < 10:
-            raise forms.ValidationError("Il messaggio è troppo breve.")
+        data = self.cleaned_data.get('message', '').strip()
+        if len(data) < 10:
+            raise forms.ValidationError("")
         return data

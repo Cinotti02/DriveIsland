@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Attiva il tuo account</title>
+  </head>
+  <body style="font-family: Arial, sans-serif; background-color: #f7f7f7; padding: 40px;">
+    <table width="100%" style="max-width: 600px; margin: auto; background-color: #ffffff; padding: 30px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+      <tr>
+        <td style="text-align: center;">
+          <h1 style="color: #2c3e50;">🚗 DriveIsland</h1>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <h2 style="color: #333;">Ciao {{ user.first_name|default:user.username }},</h2>
+          <p style="color: #555; font-size: 16px;">
+            Grazie per esserti registrato su <strong>DriveIsland</strong>! 🎉<br>
+            Per completare la registrazione e iniziare a prenotare la tua prossima auto, clicca il pulsante qui sotto:
+          </p>
+          <p style="text-align: center; margin: 30px 0;">
+            <a href="{{ activation_link }}" style="background-color: #007bff; color: white; padding: 12px 24px; text-decoration: none; border-radius: 5px; display: inline-block; font-weight: bold;">
+              ✅ Attiva il tuo account
+            </a>
+          </p>
+          <p style="color: #999; font-size: 14px;">
+            Se non hai richiesto questa registrazione, puoi ignorare questa email.
+          </p>
+          <hr style="border: none; border-top: 1px solid #eee; margin: 30px 0;">
+          <p style="color: #555; font-size: 14px;">
+            🚀 Buon viaggio con <strong>DriveIsland</strong><br>
+            <em>Il team DriveIsland</em>
+          </p>
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>
