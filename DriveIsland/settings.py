@@ -54,7 +54,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-'core.middleware.ClearMessagesOnAdminLoginMiddleware'
+    'core.middleware.ClearMessagesOnAdminLoginMiddleware'
 ]
 
 ROOT_URLCONF = 'DriveIsland.urls'
@@ -111,6 +111,7 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
+
 
 # Internationalization
 # https://docs.djangoproject.com/en/5.2/topics/i18n/
