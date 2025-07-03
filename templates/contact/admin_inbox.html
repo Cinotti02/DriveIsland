@@ -1,28 +1,38 @@
 {% extends 'base.html' %}
 {% block content %}
 
-<!-- Sub banner start -->
-<div class="sub-banner overview-bgi">
-    <div class="container breadcrumb-area">
-        <div class="breadcrumb-areas">
-            <h1>Our Inbox</h1>
-            <ul class="breadcrumbs">
-                <li><a href="{% url 'home' %}">Home</a></li>
-                <li class="active">Inbox</li>
-            </ul>
+    <!-- Sub banner start -->
+    <div class="sub-banner overview-bgi">
+        <div class="container breadcrumb-area">
+            <div class="breadcrumb-areas">
+                <h1>Our Inbox</h1>
+                <ul class="breadcrumbs">
+                    <li><a href="{% url 'home' %}">Home</a></li>
+                    <li class="active">Inbox</li>
+                </ul>
+            </div>
         </div>
     </div>
-</div>
-<!-- Sub Banner end -->
+    <!-- Sub Banner end -->
 
 
-<div class="container mt-5">
-    <h2 class="mb-4 text-center">Messaggi ricevuti</h2>
+    <div class="container mt-5">
+        {% if messages %}
+            {% for message in messages %}
 
-    {% if messages %}
-        <div class="table-responsive">
-            <table class="table table-hover table-bordered">
-                <thead class="thead-dark">
+                    <div class="alert {% if message.message == "Risposta inviata al cliente." %} alert-success {% else %} alert-danger {% endif %}">
+                        {{ message }}
+                    </div>
+
+            {% endfor %}
+        {% endif %}
+
+        <h2 class="mb-4 text-center">Messaggi ricevuti</h2>
+
+        {% if customer_messages %}
+            <div class="table-responsive">
+                <table class="table table-hover table-bordered">
+                    <thead class="thead-dark">
                     <tr>
                         <th>Data</th>
                         <th>Mittente</th>
@@ -32,17 +42,17 @@
                         <th>Messaggio</th>
                         <th>Rispondi</th>
                     </tr>
-                </thead>
+                    </thead>
 
-                <tbody>
-                <div class="mb-3 text-right">
-                  <label for="toggle-answered" class="mr-2 font-weight-bold">Visualizza:</label>
-                  <select id="toggle-answered" class="custom-select w-auto d-inline-block">
-                    <option value="all">Tutti</option>
-                    <option value="unreplied">Solo non risposti</option>
-                  </select>
-                </div>
-                    {% for msg in messages %}
+                    <tbody>
+                    <div class="mb-3 text-right">
+                        <label for="toggle-answered" class="mr-2 font-weight-bold">Visualizza:</label>
+                        <select id="toggle-answered" class="custom-select w-auto d-inline-block">
+                            <option value="all">Tutti</option>
+                            <option value="unreplied">Solo non risposti</option>
+                        </select>
+                    </div>
+                    {% for msg in customer_messages %}
                         <tr class="message-row {% if msg.reply %}replied table-light{% else %}table-warning{% endif %}">
                             <td>{{ msg.created_at|date:"d/m/Y H:i" }}</td>
                             <td>{{ msg.name }}</td>
@@ -57,16 +67,17 @@
                             </td>
                             <td>
                                 <button
-                                    class="btn btn-sm btn-outline-primary {% if msg.reply %} text-dark {% endif %}"
-                                    type="button"
-                                    data-toggle="collapse"
-                                    data-target="#msg-{{ msg.id }}">
+                                        class="btn btn-sm btn-outline-primary {% if msg.reply %} text-dark {% endif %}"
+                                        type="button"
+                                        data-toggle="collapse"
+                                        data-target="#msg-{{ msg.id }}">
                                     Leggi
                                 </button>
                             </td>
                             <td>
                                 {% if not msg.reply %}
-                                    <a href="{% url 'reply_message' msg.id %}" class="btn btn-sm btn-outline-success w-100 rounded-0 rounded-bottom">
+                                    <a href="{% url 'reply_message' msg.id %}"
+                                       class="btn btn-sm btn-outline-success w-100 rounded-0 rounded-bottom">
                                         Rispondi
                                     </a>
                                 {% endif %}
@@ -78,7 +89,8 @@
                                     <strong>Risposta:</strong><br>
                                     <div class="bg-light p-3 rounded border">
                                         {{ msg.reply|linebreaksbr }}
-                                        <p class="text-muted small mt-2 mb-0">Risposto il {{ msg.replied_at|date:"d/m/Y H:i" }}</p>
+                                        <p class="text-muted small mt-2 mb-0">Risposto
+                                            il {{ msg.replied_at|date:"d/m/Y H:i" }}</p>
                                     </div>
                                     <hr>
                                 {% endif %}
@@ -90,34 +102,34 @@
                             </td>
                         </tr>
                     {% endfor %}
-                </tbody>
-            </table>
-        </div>
-    {% else %}
-        <div class="alert alert-info text-center">
-            Nessun messaggio ricevuto.
-        </div>
-    {% endif %}
-</div>
+                    </tbody>
+                </table>
+            </div>
+        {% else %}
+            <div class="alert alert-info text-center">
+                Nessun messaggio ricevuto.
+            </div>
+        {% endif %}
+    </div>
 
     <script>
-document.addEventListener("DOMContentLoaded", function () {
-    const selector = document.getElementById("toggle-answered");
-    const rows = document.querySelectorAll(".message-row");
+        document.addEventListener("DOMContentLoaded", function () {
+            const selector = document.getElementById("toggle-answered");
+            const rows = document.querySelectorAll(".message-row");
 
-    selector.addEventListener("change", function () {
-        const showAll = this.value === "all";
+            selector.addEventListener("change", function () {
+                const showAll = this.value === "all";
 
-        rows.forEach(row => {
-            if (showAll) {
-                row.style.display = "";
-            } else if (row.classList.contains("replied")) {
-                row.style.display = "none";
-            } else {
-                row.style.display = "";
-            }
+                rows.forEach(row => {
+                    if (showAll) {
+                        row.style.display = "";
+                    } else if (row.classList.contains("replied")) {
+                        row.style.display = "none";
+                    } else {
+                        row.style.display = "";
+                    }
+                });
+            });
         });
-    });
-});
-</script>
+    </script>
 {% endblock %}
