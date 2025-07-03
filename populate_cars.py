@@ -23,6 +23,7 @@ if not image_path.exists():
 with open(image_path, 'rb') as img_file:
     img = File(img_file, name= 'panda.jpg')
 
+
     with open(image_path, 'rb') as f4:
         Car.objects.create(
             model="Peugeot 208 BlueHDi",

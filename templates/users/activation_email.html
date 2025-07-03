@@ -57,7 +57,7 @@
 <div class="confirmation-card">
     <img src="{% static 'img/gmail-icon.svg' %}" alt="Email Icon">
     <h2>Quasi fatto!</h2>
-    <p>Abbiamo inviato un'email di conferma a <strong>{{ user_email }}</strong>.</p>
+    <p>Abbiamo inviato un'email di conferma a <strong>{{ user.email }}</strong>.</p>
     <p>Controlla la tua posta, anche la cartella <strong>spam</strong>, per attivare l’account.</p>
     <p>Una volta attivato, potrai accedere normalmente al sito.</p>
     <a href="{% url 'home' %}" class="btn-home">Torna alla Home</a>

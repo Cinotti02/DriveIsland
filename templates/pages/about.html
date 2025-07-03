@@ -70,46 +70,7 @@
 </div>
 <!-- Service center end -->
 
-<!-- Our team start -->
-<div class="our-team content-area bg-grea-3">
-    <div class="container">
-        <!-- Main title -->
-        <div class="main-title">
-            <h1>Executive <span>Team</span></h1>
-            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod</p>
-        </div>
-        <!-- Slick slider area start -->
-        <div class="slick-slider-area clearfix">
-            <div class="row slick-carousel" data-slick='{"slidesToShow": 4, "responsive":[{"breakpoint": 1024,"settings":{"slidesToShow": 2}}, {"breakpoint": 768,"settings":{"slidesToShow": 1}}]}'>
-                {% for membro in team %}
-                <div class="slick-slide-item">
-                    <div class="team-1">
-                        <div class="photo">
-                            <a href="#">
-                                {% if membro.photo.url %}
-                                    <img src="{{ membro.photo.url }}" alt="{{ membro.first_name }}" class="img-fluid">
-                                {% else %}
-                                    <img src="{% static 'img/avatar/avatar-12.jpg'%}" alt="team-1" class="img-fluid">
-                                {% endif %}
-                            </a>
-                            <div class="social-list clearfix">
-                                <a href="{{ membro.facebook_link }}" class="facebook-bg"><i class="fa fa-facebook"></i></a>
-                                <a href="{{ membro.twitter_link }}" class="twitter-bg"><i class="fa fa-twitter"></i></a>
-                                <a href="{{ membro.google_link }}" class="google-bg"><i class="fa fa-google"></i></a>
-                            </div>
-                        </div>
-                        <div class="details">
-                            <h4><a href="#">{{ membro.first_name }} {{ membro.last_name }}</a></h4>
-                            <h5>{{ membro.designation }}</h5>
-                        </div>
-                    </div>
-                </div>
-                {% endfor %}
-            </div>
-        </div>
-    </div>
-</div>
-<!-- Our team end -->
+{% include "pages/team_card.html" %}
 
 <!-- Car Overview Modal -->
 <div class="car-model-2">

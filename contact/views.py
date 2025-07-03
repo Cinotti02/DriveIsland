@@ -22,7 +22,7 @@ def admin_inbox(request):
             output_field=IntegerField()
         )
     ).order_by('priority', 'created_at')
-    return render(request, 'contact/admin_inbox.html', {'messages': messages_list})
+    return render(request, 'contact/admin_inbox.html', {'customer_messages': messages_list})
 
 def contact(request):
     first_name = getattr(request.user, 'first_name', '')

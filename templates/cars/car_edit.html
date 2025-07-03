@@ -1,64 +1,116 @@
 {% extends 'base.html' %}
-
+{% load widget_tweaks %}
 {% block content %}
-  <div class="container d-flex justify-content-center align-items-center" style="min-height: 80vh;">
-    <div class="col-md-8 col-lg-6 p-5 rounded-4 shadow-lg bg-light">
 
-      <h2 class="text-center mb-4" style="font-weight: 600; color: #333;">
-        {{ title }}
-      </h2>
+    <div class="featured-car content-area">
+        <div class="container mt-5 mb-5">
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+                    <div class="card shadow border-0 ">
+                        <div class="card-header bg-danger text-center rounded-top">
+                            <h4 class="mb-0 text-white">
+                                <i class="fa fa-car me-2 text-white"></i> {{ title }}
+                            </h4>
+                        </div>
 
-      {% if messages %}
-        {% for message in messages %}
-          <div class="alert alert-{{ message.tags }} alert-dismissible fade show shadow-sm" role="alert">
-            {{ message }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Chiudi"></button>
-          </div>
-        {% endfor %}
-      {% endif %}
-
-      <form method="post" novalidate>
-        {% csrf_token %}
-        <div class="form-group mb-3">
-          {{ form.as_p }}
+                        <div class="card-body px-4 py-5">
+                            <form method="post" enctype="multipart/form-data" novalidate>
+                                {% csrf_token %}
+                                <div class="row g-3">
+                                    {% for field in form %}
+                                        {% if field.field.widget.input_type == 'file' %}
+                                            <div class="col-md-12">
+                                        {% else %}
+                                            <div class="col-md-6">
+                                        {% endif %}
+                                    <div class="form-group">
+                                        {% if field.name == "air_conditioning" %}
+                                            <div class="col-md-8">
+                                                <div class="form-check form-switch mt-4">
+                                                    {{ field.label_tag }}
+                                                    {{ field }}
+                                                </div>
+                                            </div>
+                                        {% elif field.name == "image_principal" %}
+                                            <label class="form-label fw-semibold text-dark">Cambia immagine</label>
+                                            {% if form.instance.image_principal %}
+                                                <img src="{{ form.instance.image_principal.url }}" class="img-fluid mb-2 rounded" alt="Immagine esistente">
+                                            {% endif %}
+                                            <div class="form-group">
+                                                <label class="form-label fw-semibold text-dark">
+                                                 {{ field|add_class:"form-control" }}
+                                                </label>
+                                            </div>
+                                        {% else %}
+                                            <label class="form-label fw-semibold text-dark">
+                                                {{ field.label }}
+                                            </label>
+                                            {{ field|add_class:"form-control" }}
+                                        {% endif %}
+                                        {% if field.errors %}
+                                            <div class="text-danger small mt-1">
+                                                {{ field.errors.0 }}
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                    </div>
+                                    {% endfor %}
+                                    <!-- Immagini Secondarie -->
+                                    <hr class="my-4">
+                                    <h5 class="text-center text-primary">Immagini aggiuntive</h5>
+                                    {{ formset.management_form }}
+                                    <div class="row g-3 mt-2">
+                                        {% for form in formset %}
+                                            {{ form.id }}  {# <-- QUESTO È OBBLIGATORIO #}
+                                            <div class="col-md-6">
+                                                <div class="card p-3 shadow-sm">
+                                                    {% if form.instance.image %}
+                                                        <img src="{{ form.instance.image.url }}" class="img-fluid mb-2 rounded" alt="Immagine esistente">
+                                                    {% endif %}
+                                                    <div class="form-group">
+                                                        <label class="form-label fw-semibold text-dark">Nuova immagine o sostituzione</label>
+                                                        {{ form.image }}
+                                                    </div>
+                                                    <div class="form-check mt-2">
+                                                        {{ form.DELETE }} {{ form.DELETE.label_tag }}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+                                    </div>
+                                    <div class="mt-4 text-center">
+                                        <button type="submit" class="btn btn-success px-4 me-2">
+                                            <i class="fa fa-check-circle me-1"></i> Salva Modifiche
+                                        </button>
+                                        <a href="{% url 'cars' %}" class="btn btn-outline-secondary px-4">
+                                            <i class="fa fa-times me-1"></i> Annulla
+                                        </a>
+                                    </div>
+                                </div>
+                            </form>
+                            <hr class="my-3">
+                            <div class="card-body px-4 py-5 text-center">
+                                <h3 class="text-danger">Rimuovi questa auto</h3>
+                                <p>Se desideri rimuovere Questa macchina, puoi farlo cliccando il pulsante qui
+                                    sotto.</p>
+                                <p>Tutte le prenotazioni legate a questa macchina verranno annullate e comunicate per
+                                    email ai clienti che avevano effettuato una prenotazione</p>
+                                <h4>Questa azione non può essere annullata.</h4>
+                                <br>
+                                <form method="POST" action="{% url 'delete_car' car.id %}"
+                                      onsubmit="return confirm('Sei sicuro di voler eliminare il tuo account? Questa azione è permanente.');">
+                                    {% csrf_token %}
+                                    <button type="submit" name="delete_account" class="btn btn-danger">
+                                        Cancella macchina
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-
-        <div class="d-flex justify-content-between mt-4">
-          <button type="submit" class="btn btn-success px-4 py-2 rounded-pill shadow-sm">
-            💾 Salva modifiche
-          </button>
-          <a href="{% url 'car_details' car_id=car.pk %}" class="btn btn-outline-secondary px-4 py-2 rounded-pill shadow-sm">
-            ✖ Annulla
-          </a>
-        </div>
-      </form>
-
     </div>
-  </div>
 
-    <style>
-  body {
-    background: linear-gradient(to right, #e3f2fd, #ffffff);
-    font-family: 'Segoe UI', sans-serif;
-  }
-
-  .form-control {
-    border-radius: 1rem;
-    padding: 0.75rem;
-  }
-
-  label {
-    font-weight: 500;
-  }
-
-  .btn-success {
-    background-color: #28a745;
-    border: none;
-  }
-
-  .btn-outline-secondary:hover {
-    background-color: #f8f9fa;
-    color: #333;
-  }
-</style>
 {% endblock %}
