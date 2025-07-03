@@ -1,28 +1,38 @@
 {% extends 'base.html' %}
 {% block content %}
 
-<!-- Sub banner start -->
-<div class="sub-banner overview-bgi">
-    <div class="container breadcrumb-area">
-        <div class="breadcrumb-areas">
-            <h1>Our Inbox</h1>
-            <ul class="breadcrumbs">
-                <li><a href="{% url 'home' %}">Home</a></li>
-                <li class="active">Inbox</li>
-            </ul>
+    <!-- Sub banner start -->
+    <div class="sub-banner overview-bgi">
+        <div class="container breadcrumb-area">
+            <div class="breadcrumb-areas">
+                <h1>Our Inbox</h1>
+                <ul class="breadcrumbs">
+                    <li><a href="{% url 'home' %}">Home</a></li>
+                    <li class="active">Inbox</li>
+                </ul>
+            </div>
         </div>
     </div>
-</div>
-<!-- Sub Banner end -->
+    <!-- Sub Banner end -->
 
 
-<div class="container mt-5">
-    <h2 class="mb-4 text-center">Messaggi ricevuti</h2>
+    <div class="container mt-5">
+        {% if messages %}
+            {% for message in messages %}
 
-    {% if messages %}
-        <div class="table-responsive">
-            <table class="table table-hover table-bordered">
-                <thead class="thead-dark">
+                <div class="alert {% if message.message == "Risposta inviata al cliente." %} alert-success {% else %} alert-danger {% endif %}">
+                    {{ message }}
+                </div>
+
+            {% endfor %}
+        {% endif %}
+
+        <h2 class="mb-4 text-center">Messaggi ricevuti</h2>
+
+        {% if customer_messages %}
+            <div class="table-responsive">
+                <table class="table table-hover table-bordered">
+                    <thead class="thead-dark">
                     <tr>
                         <th>Data</th>
                         <th>Mittente</th>
@@ -32,17 +42,19 @@
                         <th>Messaggio</th>
                         <th>Rispondi</th>
                     </tr>
-                </thead>
+                    </thead>
 
-                <tbody>
-                <div class="mb-3 text-right">
-                  <label for="toggle-answered" class="mr-2 font-weight-bold">Visualizza:</label>
-                  <select id="toggle-answered" class="custom-select w-auto d-inline-block">
-                    <option value="all">Tutti</option>
-                    <option value="unreplied">Solo non risposti</option>
-                  </select>
-                </div>
-                    {% for msg in messages %}
+                    <tbody>
+                    <form method="get" class="mb-3">
+                        <label for="toggle-answered" class="mr-2 font-weight-bold">Visualizza:</label>
+                        <select name="show" id="toggle-answered" class="custom-select w-auto d-inline-block" onchange="this.form.submit()">
+                            <option value="all" {% if show_filter == 'all' %}selected{% endif %}>Tutti</option>
+                            <option value="unreplied" {% if show_filter == 'unreplied' %}selected{% endif %}>Solo non risposti</option>
+                            <option value="replied" {% if show_filter != 'unreplied' %}selected{% endif %}>Solo risposti</option>
+                        </select>
+                    </form>
+                    <br><br>
+                    {% for msg in customer_messages %}
                         <tr class="message-row {% if msg.reply %}replied table-light{% else %}table-warning{% endif %}">
                             <td>{{ msg.created_at|date:"d/m/Y H:i" }}</td>
                             <td>{{ msg.name }}</td>
@@ -56,68 +68,94 @@
                                 {% endif %}
                             </td>
                             <td>
-                                <button
-                                    class="btn btn-sm btn-outline-primary {% if msg.reply %} text-dark {% endif %}"
-                                    type="button"
-                                    data-toggle="collapse"
-                                    data-target="#msg-{{ msg.id }}">
+                                <button class="btn  btn-primary"
+                                        type="button"
+                                        data-toggle="collapse"
+                                        data-target="#msg-{{ msg.id }}">
                                     Leggi
                                 </button>
                             </td>
                             <td>
                                 {% if not msg.reply %}
-                                    <a href="{% url 'reply_message' msg.id %}" class="btn btn-sm btn-outline-success w-100 rounded-0 rounded-bottom">
+                                    <a href="{% url 'reply_message' msg.id %}"
+                                       class="btn btn-danger w-100 rounded-0 rounded-bottom">
                                         Rispondi
                                     </a>
                                 {% endif %}
                             </td>
                         </tr>
                         <tr id="msg-{{ msg.id }}" class="collapse">
-                            <td colspan="6">
+                            <td colspan="7">
                                 {% if msg.reply %}
-                                    <strong>Risposta:</strong><br>
+                                    <strong>Risposta:</strong>
+                                    <br><br>
                                     <div class="bg-light p-3 rounded border">
                                         {{ msg.reply|linebreaksbr }}
-                                        <p class="text-muted small mt-2 mb-0">Risposto il {{ msg.replied_at|date:"d/m/Y H:i" }}</p>
+                                        <p class="text-muted small mt-2 mb-0">Risposto
+                                            il {{ msg.replied_at|date:"d/m/Y H:i" }}</p>
                                     </div>
                                     <hr>
                                 {% endif %}
 
-                                <strong>Messaggio ricevuto:</strong><br>
-                                <div class="mt-2">
+                                <strong>Messaggio ricevuto:</strong><br><br>
+                                <div class="bg-light p-3 rounded border">
                                     {{ msg.message|linebreaksbr }}
                                 </div>
                             </td>
                         </tr>
                     {% endfor %}
-                </tbody>
-            </table>
-        </div>
-    {% else %}
-        <div class="alert alert-info text-center">
-            Nessun messaggio ricevuto.
-        </div>
-    {% endif %}
-</div>
+                    </tbody>
+                </table>
+                <div id="pagination-container" class="mt-4 d-flex justify-content-center">
+                    <nav>
+                        <ul class="pagination">
+                            {% if customer_messages.has_previous %}
+                                <li class="page-item">
+                                    <a class="page-link"
+                                       href="?page={{ customer_messages.previous_page_number }}&show={{ show_filter }}">&laquo;</a>
+                                </li>
+                            {% else %}
+                                <li class="page-item disabled">
+                                    <span class="page-link">&laquo;</span>
+                                </li>
+                            {% endif %}
 
-    <script>
-document.addEventListener("DOMContentLoaded", function () {
-    const selector = document.getElementById("toggle-answered");
-    const rows = document.querySelectorAll(".message-row");
+                            {% for num in customer_messages.paginator.page_range %}
+                                {% if customer_messages.number == num %}
+                                    <li class="page-item active"><span class="page-link">{{ num }}</span></li>
+                                {% elif num > customer_messages.number|add:'-3' and num < customer_messages.number|add:'3' %}
+                                    <li class="page-item">
+                                        <a class="page-link" href="?page={{ num }}&show={{ show_filter }}">{{ num }}</a>
+                                    </li>
+                                {% endif %}
+                            {% endfor %}
 
-    selector.addEventListener("change", function () {
-        const showAll = this.value === "all";
+                            {% if customer_messages.has_next %}
+                                <li class="page-item">
+                                    <a class="page-link"
+                                       href="?page={{ customer_messages.next_page_number }}&show={{ show_filter }}">&raquo;</a>
+                                </li>
+                            {% else %}
+                                <li class="page-item disabled">
+                                    <span class="page-link">&raquo;</span>
+                                </li>
+                            {% endif %}
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        {% else %}
+            <div class="alert alert-info text-center">
+                Nessun messaggio ricevuto.
+            </div>
+        {% endif %}
+        <br>
+    </div>
 
-        rows.forEach(row => {
-            if (showAll) {
-                row.style.display = "";
-            } else if (row.classList.contains("replied")) {
-                row.style.display = "none";
-            } else {
-                row.style.display = "";
-            }
-        });
-    });
-});
-</script>
+    <style>
+        .pagination > li > a:hover {
+            background: #007bff;
+            color: #fff;
+        }
+    </style>
 {% endblock %}

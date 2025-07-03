@@ -1,5 +1,6 @@
 from django.core.exceptions import ValidationError
 from django.conf import settings
+from django.core.paginator import Paginator
 from django.shortcuts import render, redirect, get_object_or_404
 from .forms import ContactForm
 from .models import ContactMessage
@@ -10,19 +11,37 @@ from django.core.mail import EmailMultiAlternatives
 from django.utils.timezone import now
 from django.template.loader import render_to_string
 
+import logging
+logger = logging.getLogger(__name__)
+
 def is_admin(user):
     return user.is_authenticated and user.groups.filter(name="Amministratore").exists()
 
 @user_passes_test(is_admin)
 def admin_inbox(request):
-    messages_list = ContactMessage.objects.annotate(
+    show = request.GET.get('show', 'all')  # valore di filtro
+
+    messages_query = ContactMessage.objects.annotate(
         priority=Case(
             When(reply='', then=Value(0)),
             default=Value(1),
             output_field=IntegerField()
         )
     ).order_by('priority', 'created_at')
-    return render(request, 'contact/admin_inbox.html', {'messages': messages_list})
+
+    if show == 'unreplied':
+        messages_query = messages_query.filter(reply='')
+    elif show == 'replied':
+        messages_query = messages_query.exclude(reply='')
+
+    paginator = Paginator(messages_query, 14)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
+    return render(request, 'contact/admin_inbox.html', {
+        'customer_messages': page_obj,
+        'show_filter': show,
+    })
 
 def contact(request):
     first_name = getattr(request.user, 'first_name', '')
@@ -42,6 +61,7 @@ def contact(request):
                 if request.user.is_authenticated:
                     message.user = request.user  # solo se hai collegato l'utente nel modello
                 message.save()
+                logger.info(f"Nuovo messaggio inviato da {message.name} <{message.email}>.")
                 messages.success(request, "Il tuo messaggio è stato inviato con successo!", extra_tags='user_msg')
                 return redirect('contact')
             except ValidationError as e:
@@ -83,7 +103,7 @@ def reply_message(request, message_id):
             )
             email.attach_alternative(html_content, "text/html")
             email.send()
-
+            logger.info(f"Admin {request.user} ha risposto al messaggio ID {msg.id} di {msg.name} <{msg.email}>.")
             messages.success(request, "Risposta inviata al cliente.", extra_tags='admin_reply')
             return redirect('admin_inbox')
         else:

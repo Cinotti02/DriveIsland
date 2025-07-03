@@ -40,9 +40,10 @@
     <script  src="{% static 'js/ie-emulation-modes-warning.js' %}"></script>
 </head>
 <body>
+
 <div class="page_loader"></div>
 
-{% if request.resolver_match.url_name != 'login' and request.resolver_match.url_name != 'signup' and request.resolver_match.url_name != 'bookings_success' and request.resolver_match.url_name != 'edit_car' %}
+{% if request.resolver_match.url_name != 'login' and request.resolver_match.url_name != 'signup' and request.resolver_match.url_name != 'booking_success' and request.resolver_match.url_name != 'edit_car' and request.resolver_match.url_name != 'add_car' and request.resolver_match.url_name != 'cancel_booking' and request.resolver_match.url_name not in 'password_reset password_reset_done password_reset_confirm password_reset_complete checkout payment_success' %}
     {% include 'includes/topbar.html' %}
     {% include 'includes/navbar.html' %}
 {% endif %}
@@ -61,13 +62,13 @@
     </form>
 </div>
 
-{% if request.resolver_match.url_name != 'edit_car' and request.resolver_match.url_name != 'booking_success' and request.resolver_match.url_name != 'signup' %}
+{% if request.resolver_match.url_name != 'edit_car' and request.resolver_match.url_name != 'booking_success' and request.resolver_match.url_name != 'signup' and request.resolver_match.url_name != 'add_car' and request.resolver_match.url_name != 'cancel_booking' and request.resolver_match.url_name != 'login'  and request.resolver_match.url_name not in 'password_reset password_reset_done password_reset_confirm password_reset_complete checkout payment_success' %}
     {% include 'includes/footer.html' %}
 {% endif %}
 
-<script src="{% static 'js/jquery-2.2.0.min.js'%}"></script>
-<script src="{% static 'js/popper.min.js'%}"></script>
-<script src="{% static 'js/bootstrap.min.js'%}"></script>
+<script  src="{% static 'js/jquery-2.2.0.min.js'%}"></script>
+<script  src="{% static 'js/popper.min.js'%}"></script>
+<script  src="{% static 'js/bootstrap.min.js' %}"></script>
 <script  src="{% static 'js/bootstrap-submenu.js'%}"></script>
 <script  src="{% static 'js/rangeslider.js'%}"></script>
 <script  src="{% static 'js/jquery.mb.YTPlayer.js'%}"></script>

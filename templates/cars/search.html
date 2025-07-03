@@ -2,220 +2,256 @@
 
 {% block content %}
 
-{% load static %}
+    {% load static %}
 
-<!-- Banner start -->
-<div class="sub-banner overview-bgi">
-    <div class="container breadcrumb-area">
-        <div class="breadcrumb-areas">
-            <h1>Search Results</h1>
-            <ul class="breadcrumbs">
-                <li><a href="{% url 'home' %}">Home</a></li>
-                <li class="active">Search</li>
-            </ul>
-        </div>
-    </div>
-</div>
-<!-- Banner end -->
-
-<!-- Search box 3 start -->
-<div class="search-box-3 sb-7 bg-active">
-    <div class="container">
-        <div class="search-area-inner">
-            <div class="search-contents">
-                <form method="GET" action="{% url 'car_search' %}">
-                    <div class="row">
-                         <!-- Categoria -->
-                        <div class="col-lg-3 col-md-6 col-sm-6 col-6">
-                            <div class="form-group">
-                                <select class="selectpicker search-fields" name="category">
-                                    <option value="" {% if not request.GET.category %}selected{% endif %}>Category</option>
-                                    {% for cat in categories %}
-                                        <option value="{{ cat.name }}" {% if request.GET.category == cat.name %}selected{% endif %}>{{ cat.name }}</option>
-                                    {% endfor %}
-                                </select>
-                            </div>
-                        </div>
-
-                        <!-- Modello -->
-                        <div class="col-lg-3 col-md-6 col-sm-6 col-6">
-                            <div class="form-group">
-                                <select class="selectpicker search-fields" name="model">
-                                    <option value="" {% if not request.GET.model %}selected{% endif %}>Model</option>
-                                    {% for model in models %}
-                                        <option value="{{ model }}" {% if request.GET.model == model %}selected{% endif %}>{{ model }}</option>
-                                    {% endfor %}
-                                </select>
-                            </div>
-                        </div>
-                        <!-- Data inizio -->
-                        <div class="col-lg-3 col-md-6 col-sm-6 col-6">
-                            <div class="form-group">
-                                <label for="start_date">Data inizio</label>
-                                <input type="date" class="form-control" name="start_date" id="start_date" value="{{ request.GET.start_date }}">
-                            </div>
-                        </div>
-
-                        <!-- Data fine -->
-                        <div class="col-lg-3 col-md-6 col-sm-6 col-6">
-                            <div class="form-group">
-                                <label for="end_date">Data fine</label>
-                                <input type="date" class="form-control" name="end_date" id="end_date" value="{{ request.GET.end_date }}">
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <!-- Località -->
-                        <div class="col-lg-3 col-md-6 col-sm-6 col-6">
-                            <div class="form-group">
-                                <select class="selectpicker search-fields" name="location">
-                                    <option value="" {% if not request.GET.location %}selected{% endif %}>Location</option>
-                                    {% for key, label in locations.items %}
-                                        <option value="{{ key }}" {% if request.GET.location == key %}selected{% endif %}>{{ label }}</option>
-                                    {% endfor %}
-                                </select>
-                            </div>
-                        </div>
-                        <!-- Carburante -->
-                        <div class="col-lg-3 col-md-6 col-sm-6 col-6">
-                            <div class="form-group">
-                                <select class="selectpicker search-fields" name="fuel_type">
-                                    <option value="" {% if not request.GET.fuel_type %}selected{% endif %}>Fuel Type</option>
-                                    {% for key, label in fuel_types.items %}
-                                        <option value="{{ key }}" {% if request.GET.fuel_type == key %}selected{% endif %}>{{ label }}</option>
-                                    {% endfor %}
-                                </select>
-                            </div>
-                        </div>
-
-                        <!-- Cambio -->
-                        <div class="col-lg-3 col-md-6 col-sm-6 col-6">
-                            <div class="form-group">
-                                <select class="selectpicker search-fields" name="gearbox">
-                                    <option value="" {% if not request.GET.gearbox %}selected{% endif %}>Gearbox</option>
-                                    {% for key, label in gearboxes.items %}
-                                        <option value="{{ key }}" {% if request.GET.gearbox == key %}selected{% endif %}>{{ label }}</option>
-                                    {% endfor %}
-                                </select>
-                            </div>
-                        </div>
-
-                        <!-- Prezzo (range slider) -->
-                        <div class="col-lg-3 col-md-6 col-sm-6 col-6">
-                            <div class="form-group">
-                                <div class="range-slider">
-                                    <div data-min="0" data-max="150000" data-unit="€" data-min-name="min_price" data-max-name="max_price" class="range-slider-ui ui-slider"></div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <!-- Pulsante cerca -->
-                        <div class="col-lg-3 col-md-6 col-sm-6 col-6">
-                            <div class="form-group">
-                                <button class="btn btn-block button-theme btn-md" type="submit">
-                                    <i class="fa fa-search"></i>Find
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </form>
+    <!-- Banner start -->
+    <div class="sub-banner overview-bgi">
+        <div class="container breadcrumb-area">
+            <div class="breadcrumb-areas">
+                <h1>Search Results</h1>
+                <ul class="breadcrumbs">
+                    <li><a href="{% url 'home' %}">Home</a></li>
+                    <li class="active">Search</li>
+                </ul>
             </div>
         </div>
     </div>
-</div>
-<!-- Search box 3 end -->
+    <!-- Banner end -->
 
-<!-- car result of search -->
-<div class="featured-car content-area">
-    <div class="container">
-        <!-- Main title -->
-        <div class="main-title">
-            <h1>Here's your <span>Cars</span></h1>
-            <p>Cars that match your criteria.</p>
-        </div>
-        <div class="row">
-            {% for car in cars %}
-            <div class="col-lg-4 col-md-6">
-                <div class="car-box">
-                    <div class="car-thumbnail">
-                        <a href="{% url 'car_details' car.id %}" class="car-img">
-                            <div class="tag">For Sale</div>
-                            <img class="d-block w-100" src="{{ car.image_principal.url }}" alt="{{ car.model }}">
-                            <div class="facilities-list clearfix">
-                                <ul>
-                                    <li>
-                                        <span><i class="flaticon-way"></i></span>4,000 km
-                                    </li>
-                                    <li>
-                                        <span><i class="flaticon-calendar-1"></i></span>2020
-                                    </li>
-                                    <li>
-                                        <span><i class="flaticon-manual-transmission"></i></span>{{ car.gearbox }}
-                                    </li>
-                                </ul>
+    <!-- Search box 3 start -->
+    <div class="search-box-3 sb-7 bg-active" style="background: #007bff"> <!--todo #28a745  colore verde da vedere-->
+        <div class="container">
+            <div class="search-area-inner">
+                <div class="search-contents">
+                    <form method="GET" action="{% url 'car_search' %}">
+                        <div class="row">
+                            <!-- Categoria -->
+                            <div class="col-lg-3 col-md-6 col-sm-6 col-6">
+                                <div class="form-group">
+                                    <label class="text-dark" for="start_date">Category</label>
+                                    <select class="selectpicker search-fields" name="category">
+                                        <option value="" {% if not request.GET.category %}selected{% endif %}>Category
+                                        </option>
+                                        {% for cat in categories %}
+                                            <option value="{{ cat.name }}"
+                                                    {% if request.GET.category == cat.name %}selected{% endif %}>{{ cat.name }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
                             </div>
-                        </a>
-                        <div class="carbox-overlap-wrapper">
-                            <div class="overlap-box">
-                                <div class="overlap-btns-area">
-                                    <a class="overlap-btn" data-toggle="modal" data-target="#carOverviewModal">
-                                        <i class="fa fa-eye-slash"></i>
-                                    </a>
-                                    <div class="car-magnify-gallery">
-                                        <a href="img/car/car-1.jpg" class="overlap-btn" data-sub-html="<h4>Lamborghini Huracán</h4><p>A beautiful Sunrise this morning taken En-route to Keswick not one as planned but I'm extremely happy....</p>">
-                                            <i class="fa fa-expand"></i>
-                                            <img class="hidden" src="img/car/car-1.jpg" alt="hidden-img">
-                                        </a>
-                                        <a href="img/car/car-2.jpg" class="hidden" data-sub-html="<h4>Lexus GS Red Car</h4><p>A beautiful Sunrise this morning taken En-route to Keswick not one as planned but I'm extremely happy....</p>">
-                                            <img class="hidden" src="img/car/car-2.jpg" alt="hidden-img">
-                                        </a>
-                                        <a href="img/car/car-3.jpg" class="hidden" data-sub-html="<h4>2015 Porsche Cayenne</h4><p>A beautiful Sunrise this morning taken En-route to Keswick not one as planned but I'm extremely happy....</p>">
-                                            <img class="hidden" src="img/car/car-3.jpg" alt="hidden-img">
-                                        </a>
-                                        <a href="img/car/car-4.jpg" class="hidden" data-sub-html="<h4>Toyota Corolla</h4><p>A beautiful Sunrise this morning taken En-route to Keswick not one as planned but I'm extremely happy....</p>">
-                                            <img class="hidden" src="img/car/car-4.jpg" alt="hidden-img">
-                                        </a>
-                                        <a href="img/car/car-5.jpg" class="hidden" data-sub-html="<h4>Toyota Prius Specs</h4><p>A beautiful Sunrise this morning taken En-route to Keswick not one as planned but I'm extremely happy....</p>">
-                                            <img class="hidden" src="img/car/car-5.jpg" alt="hidden-img">
-                                        </a>
+
+                            <!-- Modello -->
+                            <div class="col-lg-3 col-md-6 col-sm-6 col-6">
+                                <div class="form-group">
+                                    <label class="text-dark" for="start_date">Model</label>
+                                    <select class="selectpicker search-fields" name="model">
+                                        <option value="" {% if not request.GET.model %}selected{% endif %}>Model
+                                        </option>
+                                        {% for model in models %}
+                                            <option value="{{ model }}"
+                                                    {% if request.GET.model == model %}selected{% endif %}>{{ model }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                            <!-- Data inizio -->
+                            <div class="col-lg-3 col-md-6 col-sm-6 col-6">
+                                <div class="form-group">
+                                    <label class="text-dark" for="start_date">Data inizio</label>
+                                    <input type="date" class="form-control" name="start_date" id="start_date"
+                                           value="{{ request.GET.start_date }}">
+                                </div>
+                            </div>
+
+                            <!-- Data fine -->
+                            <div class="col-lg-3 col-md-6 col-sm-6 col-6">
+                                <div class="form-group">
+                                    <label class="text-dark" for="end_date">Data fine</label>
+                                    <input type="date" class="form-control" name="end_date" id="end_date"
+                                           value="{{ request.GET.end_date }}">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <!-- Località -->
+                            <div class="col-lg-3 col-md-6 col-sm-6 col-6">
+                                <div class="form-group">
+                                    <label class="text-dark" for="start_date">Location for ritiro</label>
+                                    <select class="selectpicker search-fields" name="location">
+                                        <option value="" {% if not request.GET.location %}selected{% endif %}>Location
+                                        </option>
+                                        {% for key, label in locations.items %}
+                                            <option value="{{ key }}"
+                                                    {% if request.GET.location == key %}selected{% endif %}>{{ label }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                            <!-- Carburante -->
+                            <div class="col-lg-3 col-md-6 col-sm-6 col-6">
+                                <div class="form-group">
+                                    <label class="text-dark" for="fuel_type">Fuel Type</label>
+                                    <select class="selectpicker search-fields" name="fuel_type">
+                                        <option value="" {% if not request.GET.fuel_type %}selected{% endif %}>Fuel
+                                            Type
+                                        </option>
+                                        {% for key, label in fuel_types.items %}
+                                            <option value="{{ key }}"
+                                                    {% if request.GET.fuel_type == key %}selected{% endif %}>{{ label }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- Cambio -->
+                            <div class="col-lg-3 col-md-6 col-sm-6 col-6">
+                                <div class="form-group">
+                                    <label class="text-dark" for="gearbox">Gearbox</label>
+                                    <select class="selectpicker search-fields" name="gearbox">
+                                        <option value="" {% if not request.GET.gearbox %}selected{% endif %}>Gearbox
+                                        </option>
+                                        {% for key, label in gearboxes.items %}
+                                            <option value="{{ key }}"
+                                                    {% if request.GET.gearbox == key %}selected{% endif %}>{{ label }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- Prezzo (range slider) -->
+                            <div class="col-lg-3 col-md-6 col-sm-6 col-6">
+                                <div class="form-group">
+                                    <label class="text-dark" for="price_range">Price Range</label>
+                                    <div class="range-slider">
+                                        <div data-min="0" data-max="200" data-unit="€" data-min-name="min_price"
+                                             data-max-name="max_price" class="range-slider-ui ui-slider"></div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <a href="{% url 'car_details' car.id %}">
-                    <div class="detail">
-                        <h1 class="title">
-                            {{ car.model }}
-                        </h1>
-                        <div class="location">
-                                <i class="flaticon-pin"></i>{{ car.location }}
+                        <br>
+                        <div class="row">
+                            <!-- Pulsante cerca -->
+                            <div class="col-lg-3 col-md-6 col-sm-6 col-6 d-block mx-auto">
+                                <div class="form-group">
+                                    <button class="btn btn-block button-theme btn-md" type="submit">
+                                        <i class="fa fa-search"></i>Find
+                                    </button>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                    <div class="footer clearfix">
-                        <div class="pull-left ratings days">
-                            <p class="cartype">{{ car.category.name }}</p>
-                        </div>
-                        <div class="pull-right">
-                            <p class="price">${{ car.price_per_day }}</p>
-                        </div>
-                    </div>
-                    </a>
-                    <a href="{% url 'create_booking' %}?car={{ car.id }}&start_date={{ request.GET.start_date }}&end_date={{ request.GET.end_date }}">
-                        <div class="text-center">
-                            <button class="btn btn-lg btn-theme" style="width:100%">Prenota ora</button>
-                        </div>
-                    </a>
+                    </form>
                 </div>
             </div>
-            {% empty %}
-                <p class="col-12 text-center">No cars match your search.</p>
-            {% endfor %}
         </div>
     </div>
-</div>
-<!-- Featured car end -->
+    <!-- Search box 3 end -->
+
+    <!-- car result of search -->
+    <div class="featured-car content-area">
+        <div class="container">
+            <!-- Main title -->
+            <div class="main-title">
+                <h1>Here's your <span style="color: #007bff">Cars</span></h1>
+                <p>Cars that match your criteria.</p>
+            </div>
+            <div class="row">
+                {% for car in cars %}
+                    <div class="col-lg-4 col-md-6">
+                        <div class="car-box">
+                            <div class="car-thumbnail" style="position: relative; overflow: hidden">
+                                <a href="{% url 'car_details' car.id %}" class="car-img">
+                                    {% if car.discount_active %}
+                                        <div class="tag-2 bg-success">Sconto</div>
+                                    {% endif %}
+                                    <img class="d-block w-100" src="{{ car.image_principal.url }}"
+                                         alt="{{ car.model }}">
+                                    <div class="facilities-list clearfix">
+                                        <ul>
+                                            <li>
+                                                <span><i class="flaticon-fuel" style="color: #007bff"></i></span>{{ car.fuel_type }}
+                                            </li>
+                                            <li>
+                                                <span><i></i></span>{{ car.category }}
+                                            <li>
+                                                <span><i
+                                                        class="flaticon-manual-transmission" style="color: #007bff"></i></span>{{ car.gearbox }}
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </a>
+                                <div class="carbox-overlap-wrapper">
+                                    <div class="overlap-box">
+                                        <div class="overlap-btns-area">
+                                            <div class="car-magnify-gallery">
+                                                <a href="{{ car.image_principal.url }}" class="overlap-btn"
+                                                   data-sub-html="<h4>{{ car.model }}</h4>">
+                                                    <i class="fa fa-expand"></i>
+                                                    <img class="hidden" src="{{ car.image_principal.url }}"
+                                                         alt="{{ car.model }}">
+                                                </a>
+
+                                                <!-- Immagini secondarie (nascoste ma incluse nel lightbox) -->
+                                                {% for image in car.images.all %}
+                                                    <a href="{{ image.image.url }}" class="hidden"
+                                                       data-sub-html="<h4>{{ car.model }}</h4>">
+                                                        <img class="hidden" src="{{ image.image.url }}"
+                                                             alt="{{ car.model }}">
+                                                    </a>
+                                                {% endfor %}
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <a href="{% url 'car_details' car.id %}">
+                                <div class="detail">
+                                    <h1 class="title">
+                                        {{ car.model }}
+                                    </h1>
+                                    <div class="location">
+                                        <i class="flaticon-pin"></i>{{ car.location }}
+                                    </div>
+                                </div>
+                                <div class="footer clearfix">
+                                    <div class="pull-left ratings days">
+                                        <p class="cartype text-primary">{{ car.category.name }}</p>
+                                    </div>
+                                    <div class="pull-right">
+                                        {% if car.discount_active %}
+                                            <p class="price">
+                                                <span style="text-decoration: line-through; color: grey; margin-right: 10px">
+                                                        {{ car.price_per_day }}€
+                                                </span>
+                                                <span class="text-primary fw-bold">
+                                                    {{ car.get_discounted_price|floatformat:2 }}€
+                                                </span>
+                                            </p>
+                                        {% else %}
+                                            <p class="price text-primary">{{ car.price_per_day }}€</p>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </a>
+                            <div class="widget advanced-search2">
+                                <a class="btn btn-danger d-block mx-auto search-button" style="background: #00aced"
+                                   href="{% url 'create_booking' %}?car={{ car.id }}&start_date={{ request.GET.start_date }}&end_date={{ request.GET.end_date }}">
+                                    <div class="text-center">
+                                        Prenota ora
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                {% empty %}
+                    <p class="col-12 text-center">No cars match your search.</p>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    <!-- Featured car end -->
+
 
 {% endblock content %}

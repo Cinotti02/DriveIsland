@@ -2,36 +2,54 @@
 {% block content %}
 
 
-<!-- Sub banner start -->
-<div class="sub-banner overview-bgi">
-    <div class="container breadcrumb-area">
-        <div class="breadcrumb-areas">
-            <h1>Our Inbox</h1>
-            <ul class="breadcrumbs">
-                <li><a href="{% url 'home' %}">Home</a></li>
-                <li class="active">Inbox</li>
-            </ul>
+    <!-- Sub banner start -->
+    <div class="sub-banner overview-bgi">
+        <div class="container breadcrumb-area">
+            <div class="breadcrumb-areas">
+                <h1>Our Inbox</h1>
+                <ul class="breadcrumbs">
+                    <li><a href="{% url 'home' %}">Home</a></li>
+                    <li class="active">Inbox</li>
+                </ul>
+            </div>
         </div>
     </div>
-</div>
-<!-- Sub Banner end -->
+    <!-- Sub Banner end -->
 
 
-<div class="container mt-5">
-  <h2>Rispondi a: {{ msg.name }} – “{{ msg.subject }}”</h2>
-  <p><strong>Messaggio originale:</strong></p>
-  <div class="border p-3 mb-3">{{ msg.message|linebreaksbr }}</div>
-
-  <form method="post">
-    {% csrf_token %}
-    <div class="form-group">
-      <label for="reply">La tua risposta:</label>
-      <textarea name="reply" id="reply" rows="6" class="form-control">{{ msg.reply }}</textarea>
+    <div class="container mt-5">
+        {% if messages %}
+            {% for message in messages %}
+                {% if "admin_reply" not in message.tags %}
+                    <div class="alert {% if message.message == "Risposta inviata al cliente." %} alert-success {% else %} alert-danger {% endif %}">
+                        {{ message }}
+                    </div>
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+        <div class="d-flex justify-content-center">
+            <div class="col-md-8">
+                <h2 class="text-center">Rispondi a: {{ msg.name }}</h2>
+                <h4 class="text-center">Oggetto: “{{ msg.subject }}”</h4>
+                <p>Messaggio originale:</p>
+                <div class="border p-3 mb-4">{{ msg.message|linebreaksbr }}</div>
+            </div>
+        </div>
+        <div class="d-flex justify-content-center">
+            <div class="col-md-8">
+                <form method="post" class="text-center">
+                    {% csrf_token %}
+                    <div class="form-group text-left">
+                        <label for="reply">La tua risposta:</label>
+                        <textarea name="reply" id="reply" rows="6" class="form-control">{{ msg.reply }}</textarea>
+                    </div>
+                    <div class="mt-3 d-flex justify-content-center gap-2">
+                        <button type="submit" class="btn btn-primary me-2" style="margin: 1rem;">Invia risposta</button>
+                        <a href="{% url 'admin_inbox' %}" class="btn btn-danger" style="margin: 1rem;">Annulla</a>
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
-    <button type="submit" class="btn btn-success mt-2">Invia risposta</button>
-    <a href="{% url 'admin_inbox' %}" class="btn btn-secondary mt-2">Annulla</a>
-  </form>
-</div>
-
     <br>
 {% endblock %}

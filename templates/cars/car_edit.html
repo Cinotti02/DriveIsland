@@ -1,64 +1,220 @@
 {% extends 'base.html' %}
-
+{% load widget_tweaks %}
 {% block content %}
-  <div class="container d-flex justify-content-center align-items-center" style="min-height: 80vh;">
-    <div class="col-md-8 col-lg-6 p-5 rounded-4 shadow-lg bg-light">
 
-      <h2 class="text-center mb-4" style="font-weight: 600; color: #333;">
-        {{ title }}
-      </h2>
+    <div class="featured-car content-area">
+        <div class="container mt-5 mb-5">
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+                    <div class="card shadow border-0 ">
+                        <div class="card-header bg-primary text-center rounded-top">
+                            <h4 class="mb-0 text-white">
+                                <i class="fa fa-car me-2 text-white"></i> {{ title }}
+                            </h4>
+                        </div>
 
-      {% if messages %}
-        {% for message in messages %}
-          <div class="alert alert-{{ message.tags }} alert-dismissible fade show shadow-sm" role="alert">
-            {{ message }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Chiudi"></button>
-          </div>
-        {% endfor %}
-      {% endif %}
+                        <div class="card-body px-4 py-5">
+                            <form method="post" enctype="multipart/form-data" novalidate>
+                                {% csrf_token %}
+                                <div class="row g-3">
+                                    {% for field in form %}
+                                        {% if field.field.widget.input_type == 'file' %}
+                                            <div class="col-md-12">
+                                        {% else %}
+                                            <div class="col-md-6">
+                                        {% endif %}
+                                    <div class="form-group">
+                                        {% if field.name == "air_conditioning" %}
+                                            <div class="col-md-8">
+                                                <div class="form-check form-switch mt-4">
+                                                    {{ field.label_tag }}
+                                                    {{ field }}
+                                                </div>
+                                            </div>
+                                        {% elif field.name == "image_principal" %}
+                                            <label class="form-label fw-semibold text-dark">Cambia immagine</label>
+                                            <div>
+                                                {% if form.instance.image_principal %}
+                                                    <img src="{{ form.instance.image_principal.url }}"
+                                                         style="width: 200px"
+                                                         class="img-fluid mb-2 rounded" alt="Immagine esistente">
+                                                {% endif %}
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="form-label fw-semibold text-dark">
+                                                    {{ field|add_class:"form-control" }}
+                                                </label>
+                                            </div>
+                                        {% else %}
+                                            <label class="form-label fw-semibold text-dark">
+                                                {{ field.label }}
+                                            </label>
+                                            {{ field|add_class:"form-control" }}
+                                        {% endif %}
+                                        {% if field.errors %}
+                                            <div class="text-danger small mt-1">
+                                                {{ field.errors.0 }}
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                    </div>
+                                    {% endfor %}
 
-      <form method="post" novalidate>
-        {% csrf_token %}
-        <div class="form-group mb-3">
-          {{ form.as_p }}
+                                    <!-- Immagini Secondarie -->
+                                    </div>
+                                    <hr>
+                                    <div class="form-group">
+                                        <label for="secondary_images_input">Immagini secondarie</label>
+                                        <input type="file" id="secondary_images_input" name="secondary_images" multiple
+                                               class="form-control">
+
+                                        <!-- Preview di tutte le immagini -->
+                                        <div id="preview-container" class="mt-3 d-flex flex-wrap gap-2">
+
+                                            <!-- Immagini esistenti -->
+                                            {% for form in formset %}
+                                                {{ form.id }} {# Necessario per Django #}
+                                                <div class="preview-image position-relative">
+                                                    {% if form.instance.image %}
+                                                        <img src="{{ form.instance.image.url }}"
+                                                             alt="Immagine esistente">
+                                                        <button type="button" class="remove-btn"
+                                                                onclick="removeExistingImage(this)">
+                                                            ×
+                                                        </button>
+                                                        {{ form.DELETE|add_class:"d-none" }}
+                                                    {% endif %}
+                                                </div>
+                                            {% endfor %}
+
+                                        </div>
+                                        {{ formset.management_form }}
+                                    </div>
+
+
+                                    <div class="mt-4 text-center">
+                                        <button type="submit" class="btn btn-success px-4 me-2">
+                                            <i class="fa fa-check-circle me-1"></i> Salva Modifiche
+                                        </button>
+                                        <a href="{% url 'cars' %}" class="btn btn-outline-secondary px-4">
+                                            <i class="fa fa-times me-1"></i> Annulla
+                                        </a>
+                                    </div>
+                                </div>
+                            </form>
+                            <hr class="my-3">
+                            <div class="card-body px-4 py-5 text-center">
+                                <h3 class="text-danger">Rimuovi questa auto</h3>
+                                <p>Se desideri rimuovere Questa macchina, puoi farlo cliccando il pulsante qui
+                                    sotto.</p>
+                                <p>Tutte le prenotazioni legate a questa macchina verranno annullate e comunicate per
+                                    email ai clienti che avevano effettuato una prenotazione</p>
+                                <h4>Questa azione non può essere annullata.</h4>
+                                <br>
+                                <form method="POST" action="{% url 'delete_car' car.id %}"
+                                      onsubmit="return confirm('Sei sicuro di voler eliminare il tuo account? Questa azione è permanente.');">
+                                    {% csrf_token %}
+                                    <button type="submit" name="delete_account" class="btn btn-danger">
+                                        Cancella macchina
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-
-        <div class="d-flex justify-content-between mt-4">
-          <button type="submit" class="btn btn-success px-4 py-2 rounded-pill shadow-sm">
-            💾 Salva modifiche
-          </button>
-          <a href="{% url 'car_details' car_id=car.pk %}" class="btn btn-outline-secondary px-4 py-2 rounded-pill shadow-sm">
-            ✖ Annulla
-          </a>
-        </div>
-      </form>
-
     </div>
-  </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const input = document.getElementById('secondary_images_input');
+            const previewContainer = document.getElementById('preview-container');
+            let selectedFiles = [];
+
+            input.addEventListener('change', (e) => {
+                const files = Array.from(e.target.files);
+
+                files.forEach(file => {
+                    selectedFiles.push(file);
+
+                    const reader = new FileReader();
+                    reader.onload = function (event) {
+                        const div = document.createElement('div');
+                        div.className = 'position-relative m-2';
+
+                        const img = document.createElement('img');
+                        img.src = event.target.result;
+                        img.className = 'img-fluid rounded border';
+                        img.style.height = '100px';
+
+                        const btn = document.createElement('button');
+                        btn.type = 'button';
+                        btn.textContent = '×';
+                        btn.className = 'remove-btn';
+                        btn.onclick = () => {
+                            previewContainer.removeChild(div);
+                            selectedFiles = selectedFiles.filter(f => f !== file);
+                            updateFileInput();
+                        };
+
+                        div.appendChild(img);
+                        div.appendChild(btn);
+                        previewContainer.appendChild(div);
+                    };
+
+                    reader.readAsDataURL(file);
+                });
+
+                updateFileInput();
+            });
+
+            function updateFileInput() {
+                const dataTransfer = new DataTransfer();
+                selectedFiles.forEach(file => dataTransfer.items.add(file));
+                input.files = dataTransfer.files;
+            }
+
+        });
+
+        function removeExistingImage(btn) {
+            const container = btn.closest('.preview-image');
+            const checkbox = container.querySelector('input[type="checkbox"]');
+            if (checkbox) {
+                checkbox.checked = true;
+            }
+            container.style.display = 'none';  // Nasconde l'immagine già salvata
+        }
+    </script>
 
     <style>
-  body {
-    background: linear-gradient(to right, #e3f2fd, #ffffff);
-    font-family: 'Segoe UI', sans-serif;
-  }
+        .preview-image {
+            position: relative;
+            display: inline-block;
+        }
 
-  .form-control {
-    border-radius: 1rem;
-    padding: 0.75rem;
-  }
+        .preview-image img {
+            height: 100px;
+            width: 100px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            object-fit: cover;
+        }
 
-  label {
-    font-weight: 500;
-  }
+        .remove-btn {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: red;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            font-size: 12px;
+            cursor: pointer;
+            width: 20px;
+            height: 20px;
+        }
+    </style>
 
-  .btn-success {
-    background-color: #28a745;
-    border: none;
-  }
 
-  .btn-outline-secondary:hover {
-    background-color: #f8f9fa;
-    color: #333;
-  }
-</style>
 {% endblock %}

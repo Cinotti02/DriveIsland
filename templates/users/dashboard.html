@@ -2,29 +2,40 @@
 
 {% block content %}
 
-{% load static %}
+    {% load static %}
 
-<!-- Sub banner start -->
-<div class="sub-banner overview-bgi">
-    <div class="container breadcrumb-area">
-        <div class="breadcrumb-areas">
-            <h1>Dashboard</h1>
-            <ul class="breadcrumbs">
-                <li><a href="{% url 'home' %}">Home</a></li>
-                <li class="active">Username</li>
-            </ul>
+    <!-- Sub banner start -->
+    <div class="sub-banner overview-bgi">
+        <div class="container breadcrumb-area">
+            <div class="breadcrumb-areas">
+                <h1>Dashboard</h1>
+                <ul class="breadcrumbs">
+                    <li><a href="{% url 'home' %}">Home</a></li>
+                    <li class="active">{{ user.username }}</li>
+                </ul>
+            </div>
         </div>
     </div>
-</div>
-<!-- Sub Banner end -->
+    <!-- Sub Banner end -->
 
-<!--   Dashboard Start   -->
+    <!--   Dashboard Start   -->
 
     <div class="container mt-50 mb-50">
+    <span class="d-block d-lg-none"><br></span>
         <div class="main-title">
-            <h1>Welcome <span>{{ user.username }}</span></h1>
+
+            <h1>Welcome <span style="color: #007bff">{{ user.username }}</span></h1>
             <p>Ecco le tue informazioni personali e le prenotazioni effettuate.</p>
         </div>
+        {% if messages %}
+            {% for message in messages %}
+                {% if "admin_reply" not in message.tags %}
+                    <div class="alert {% if message.message == "Profilo aggiornato con successo." %} alert-success {% else %} alert-danger {% endif %}">
+                        {{ message }}
+                    </div>
+                {% endif %}
+            {% endfor %}
+        {% endif %}
         <div class="card shadow-sm mb-5 border-0 rounded-4 bg-light">
             <div class="card-body py-4 px-5">
                 <h4 class="card-title mb-4 text-primary fw-bold">
@@ -75,6 +86,7 @@
         <div class="main-title">
             <h3>Storico prenotazioni</h3>
         </div>
+    <div class="table-responsive">
         <table class="table table-hover">
             <thead>
             <tr>
@@ -93,10 +105,10 @@
                     <th scope="row">{{ forloop.counter }}</th>
                     <td>{{ booking.car }}</td>
                     <td>{{ booking.car.get_location_display }}</td>
-                    <td>{{ booking.start_date|date:"d M Y" }}</td>
-                    <td>{{ booking.end_date|date:"d M Y" }}</td>
+                    <td>{{ booking.start_datetime|date:"d/M/Y H:i" }}</td>
+                    <td>{{ booking.end_datetime|date:"d/M/Y H:i" }}</td>
                     <td>{{ booking.total_price|floatformat:2 }}€</td>
-                    <td>
+                    <td class="text-nowrap">
                         <a href="{% url 'car_details' booking.car.id %}" class="btn btn-outline-dark">View Car</a>
                         {% if booking.start_date > today %}
                             <form method="post"
@@ -118,6 +130,7 @@
             {% endfor %}
             </tbody>
         </table>
+    </div>
     </div>
     <!--   Dashboard End   -->
 

@@ -2,409 +2,394 @@
 
 {% block content %}
 
-{% load static %}
+    {% load static %}
 
 
-<!-- Sub banner start -->
-<div class="sub-banner overview-bgi">
-    <div class="container breadcrumb-area">
-        <div class="breadcrumb-areas">
-            <h1>{{ car.model }}</h1>
-            <ul class="breadcrumbs">
-                <li><a href="{% url 'home' %}">Home</a></li>
-                <li class="active">{{ car.model }}</li>
-            </ul>
+    <!-- Sub banner start -->
+    <div class="sub-banner overview-bgi">
+        <div class="container breadcrumb-area">
+            <div class="breadcrumb-areas">
+                <h1>{{ car.model }}</h1>
+                <ul class="breadcrumbs">
+                    <li><a href="{% url 'home' %}">Home</a></li>
+                    <li class="active">{{ car.model }}</li>
+                </ul>
+            </div>
         </div>
     </div>
-</div>
-<!-- Sub Banner end -->
+    <!-- Sub Banner end -->
 
-<!-- Car details page start -->
-<div class="car-details-page content-area-6">
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-8 col-md-12 col-xs-12">
-                <div class="car-details-section">
-                    <!-- Heading start -->
-                    <div class="heading-car clearfix">
-                        <div class="pull-left">
-                            <h3>{{ car.model }}</h3>
-                            <h6>
-                                <i class="flaticon-pin"></i>{{ car.get_location_display }}
-                            </h6>
-                        </div>
-                        <div class="pull-right">
-                            <h3><span>{{ car.price_per_day|floatformat:2 }}€</span></h3>
-                        </div>
-                    </div>
-                    <div id="carDetailsSlider" class="carousel car-details-sliders slide mb-40">
-                        <!-- main slider carousel items-->
-                        <div class="carousel-inner">
-                            <div class="carousel-item active">
-                                <img src="{{ car.image_principal.url }}" class="img-fluid" alt="Immagine principale">
+    <!-- Car details page start -->
+    <div class="car-details-page content-area-6">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-md-12 col-xs-12">
+                    <div class="car-details-section">
+                        <!-- Heading start -->
+                        <div class="heading-car clearfix">
+                            <div class="pull-left">
+                                <h3>{{ car.model }}</h3>
+                                <h6>
+                                    <i class="flaticon-pin"></i>{{ car.get_location_display }}
+                                </h6>
                             </div>
-                            <!-- Immagini secondarie -->
-                            {% for image in car.gallery.all %}
-                                <div class="carousel-item">
-                                    <img src="{{ image.image.url }}" class="img-fluid" alt="Immagine secondaria {{ forloop.counter }}">
-                                </div>
-                            {% endfor %}
+                            <div class="pull-right">
+                                {% if car.discount_active %}
+                                    <p class="price" style="margin-bottom: 0; text-align: right;">
+                                        <span style="font-weight: 600; display: block; text-decoration: line-through;">
+                                            {{ car.price_per_day }}€
+                                        </span>
+                                        <span class="text-success" style="font-weight: 800; font-size: 20px">
+                                            {{ car.get_discounted_price|floatformat:2 }}€
+                                        </span>
+                                    </p>
+                                {% else %}
+                                    <p class="price">{{ car.price_per_day }}€</p>
+                                {% endif %}
+                            </div>
                         </div>
-                        <!-- main slider carousel nav controls -->
-                        <div class="carousel-indicators-section clearfix">
-                            <ul class="carousel-indicators car-properties list-inline nav nav-justified">
-                                <li class="list-inline-item active">
-                                    <a id="carousel-selector-0" class="selected" data-slide-to="0" data-target="#carDetailsSlider">
-                                        <img src="{{ car.image_principal.url }}" class="img-fluid" alt="Thumb principale">
-                                    </a>
-                                </li>
+                        <div id="carDetailsSlider" class="carousel car-details-sliders slide mb-40">
+                            <!-- main slider carousel items-->
+                            <div class="carousel-inner">
+                                <div class="carousel-item active">
+                                    <img src="{{ car.image_principal.url }}" class="img-fluid"
+                                         alt="Immagine principale">
+                                </div>
+                                <!-- Immagini secondarie -->
                                 {% for image in car.gallery.all %}
-                                    <li class="list-inline-item">
-                                        <a data-slide-to="{{ forloop.counter }}" data-target="#carDetailsSlider">
-                                            <img src="{{ image.image.url }}" class="img-fluid" alt="Thumb {{ forloop.counter }}">
+                                    <div class="carousel-item">
+                                        <img src="{{ image.image.url }}" class="img-fluid"
+                                             alt="Immagine secondaria {{ forloop.counter }}">
+                                    </div>
+                                {% endfor %}
+                            </div>
+                            <!-- main slider carousel nav controls -->
+                            <div class="carousel-indicators-section clearfix" style="background: #007bff">
+                                <ul class="carousel-indicators car-properties list-inline nav nav-justified">
+                                    <li class="list-inline-item active" style="background: #007bff">
+                                        <a id="carousel-selector-0" class="selected" data-slide-to="0"
+                                           data-target="#carDetailsSlider">
+                                            <img src="{{ car.image_principal.url }}" class="img-fluid"
+                                                 alt="Thumb principale">
                                         </a>
                                     </li>
-                                {% endfor %}
-                            </ul>
-                        </div>
-                    </div>
-                    
-                    <!-- Tabbing box start -->
-                    <div class="tabbing tabbing-box mb-40">
-                        <ul class="nav nav-tabs" id="carTab" role="tablist">
-                            <li class="nav-item">
-                                <a class="nav-link active show" id="one-tab" data-toggle="tab" href="#one" role="tab" aria-controls="one" aria-selected="false">Vehicle overview</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" id="two-tab" data-toggle="tab" href="#two" role="tab" aria-controls="two" aria-selected="false">Features</a>
-                            </li>
-                        </ul>
-                        <div class="tab-content" id="carTabContent">
-                            <div class="tab-pane fade active show" id="one" role="tabpanel" aria-labelledby="one-tab">
-                                <div class="car-description mb-50">
-                                    <h3 class="heading-2">
-                                        Description
-                                    </h3>
-                                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas in pulvinar neque. Nulla finibus lobortis pulvinar. Donec a consectetur nulla. Nulla posuere sapien vitae lectus suscipit, et pulvinar nisi tincidunt. Aliquam erat volutpat. Curabitur convallis fringilla diam sed aliquam. Sed tempor iaculis massa faucibus feugiat. In fermentum facilisis massa, a consequat purus viverra a. Aliquam pellentesque nibh et nibh feugiat gravida. Maecenas ultricies, diam vitae semper placerat, velit risus accumsan nisl, eget tempor lacus est vel nunc. Proin accumsan elit sed neque euismod fringilla. Curabitur lobortis nunc velit, et fermentum urna dapibus non. Vivamus magna lorem, elementum id gravida ac, laoreet tristique augue. Maecenas dictum lacus eu nunc porttitor, ut hendrerit arcu efficitur.</p>
-                                    <p>Aliquam ultricies nunc porta metus interdum mollis. Donec porttitor libero augue, vehicula tincidunt lectus placerat a. Sed tincidunt dolor non sem dictum dignissim. Nulla vulputate orci felis, ac ornare purus ultricies a. Fusce euismod magna orci, sit amet aliquam turpis dignissim ac. In at tortor at ligula pharetra sollicitudin. Sed tincidunt, purus eget laoreet elementum, felis est pharetra ante, tincidunt feugiat libero enim sed risus. Sed at leo sit amet mi bibendum aliquam. Interdum et malesuada fames ac ante ipsum primis in faucibus. Praesent cursus varius odio, non faucibus dui. Nunc vehicula lectus sed velit suscipit aliquam vitae eu ipsum. adipiscing elit.</p>
-                                </div>
+                                    {% for image in car.gallery.all %}
+                                        <li class="list-inline-item">
+                                            <a data-slide-to="{{ forloop.counter }}" data-target="#carDetailsSlider">
+                                                <img src="{{ image.image.url }}" class="img-fluid"
+                                                     alt="Thumb {{ forloop.counter }}">
+                                            </a>
+                                        </li>
+                                    {% endfor %}
+                                </ul>
                             </div>
-                            <div class="tab-pane fade" id="two" role="tabpanel" aria-labelledby="two-tab">
-                                <div class="features-info mb-50">
-                                    <h3 class="heading-2">Features</h3>
-                                    <div class="row">
-                                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                            <ul>
-                                                <li>
-                                                    Adaptive Cruise Control
-                                                </li>
-                                                <li>
-                                                    Airbags
-                                                </li>
-                                                <li>
-                                                    Air Conditioning
-                                                </li>
-                                                <li>
-                                                    Alarm System
-                                                </li>
-                                                <li>
-                                                    Anti-theft Protection
-                                                </li>
-                                                <li>
-                                                    Audio Interface
-                                                </li>
-                                                <li>
-                                                    Automatic Climate Control
-                                                </li>
-                                                <li>
-                                                    Automatic Headlights
-                                                </li>
-                                                <li>
-                                                    Auto Start/Stop
-                                                </li>
-                                                <li>
-                                                    Bi-Xenon Headlights
-                                                </li>
-                                                <li>
-                                                    Audio Interface
-                                                </li>
-                                                <li>
-                                                    Bluetooth Handset
-                                                </li>
-                                                <li>
-                                                    BOSE Surround Sound
-                                                </li>
-                                                <li>
-                                                    Burmester Surround Sound
-                                                </li>
-                                                <li>
-                                                    CD/DVD Autochanger
-                                                </li>
-                                            </ul>
-                                        </div>
-                                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                            <ul>
-                                                <li>
-                                                    CDR Audio
-                                                </li>
-                                                <li>
-                                                    Cruise Control
-                                                </li>
-                                                <li>
-                                                    Direct Fuel Injection
-                                                </li>
-                                                <li>
-                                                    Electric Parking Brake
-                                                </li>
-                                                <li>
-                                                    Floor Mats
-                                                </li>
-                                                <li>
-                                                    Garage Door Opener
-                                                </li>
-                                                <li>
-                                                    Leather Package
-                                                </li>
-                                                <li>
-                                                    Locking Rear Differential
-                                                </li>
-                                                <li>
-                                                    Luggage Compartments
-                                                </li>
-                                                <li>
-                                                    Manual Transmission
-                                                </li>
-                                                <li>
-                                                    Navigation Module
-                                                </li>
-                                                <li>
-                                                    Online Services
-                                                </li>
-                                                <li>
-                                                    ParkAssist
-                                                </li>
-                                                <li>
-                                                    Porsche Communication
-                                                </li>
-                                                <li>
-                                                    CD/DVD Autochanger
-                                                </li>
-                                            </ul>
-                                        </div>
-                                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                            <ul>
-                                                <li>
-                                                    Power Steering
-                                                </li>
-                                                <li>
-                                                    Reversing Camera
-                                                </li>
-                                                <li>
-                                                    Roll-over Protection
-                                                </li>
-                                                <li>
-                                                    Seat Heating
-                                                </li>
-                                                <li>
-                                                    Seat Ventilation
-                                                </li>
-                                                <li>
-                                                    Sound Package Plus
-                                                </li>
-                                                <li>
-                                                    Sport Chrono Package
-                                                </li>
-                                                <li>
-                                                    Steering Wheel Heating
-                                                </li>
-                                                <li>
-                                                    Tire Pressure Monitoring
-                                                </li>
-                                                <li>
-                                                    Universal Audio Interface
-                                                </li>
-                                                <li>
-                                                    Voice Control System
-                                                </li>
-                                                <li>
-                                                    Wind Deflector
-                                                </li>
-                                            </ul>
+                        </div>
+
+                        <!-- Tabbing box start -->
+                        <div class="tabbing tabbing-box mb-40">
+                            <ul class="nav nav-tabs" id="carTab" role="tablist">
+                                <li class="nav-item">
+                                    <a class="nav-link active show" id="one-tab" data-toggle="tab" href="#one"
+                                       role="tab" aria-controls="one" aria-selected="false">Vehicle overview</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" id="two-tab" data-toggle="tab" href="#two" role="tab"
+                                       aria-controls="two" aria-selected="false">Features</a>
+                                </li>
+                            </ul>
+                            <div class="tab-content" id="carTabContent">
+                                <div class="tab-pane fade active show" id="one" role="tabpanel"
+                                     aria-labelledby="one-tab">
+                                    <div class="car-description mb-50">
+                                        <h3 class="heading-2">
+                                            Description
+                                        </h3>
+                                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas in pulvinar
+                                            neque. Nulla finibus lobortis pulvinar. Donec a consectetur nulla. Nulla
+                                            posuere sapien vitae lectus suscipit, et pulvinar nisi tincidunt. Aliquam
+                                            erat volutpat. Curabitur convallis fringilla diam sed aliquam. Sed tempor
+                                            iaculis massa faucibus feugiat. In fermentum facilisis massa, a consequat
+                                            purus viverra a. Aliquam pellentesque nibh et nibh feugiat gravida. Maecenas
+                                            ultricies, diam vitae semper placerat, velit risus accumsan nisl, eget
+                                            tempor lacus est vel nunc. Proin accumsan elit sed neque euismod fringilla.
+                                            Curabitur lobortis nunc velit, et fermentum urna dapibus non. Vivamus magna
+                                            lorem, elementum id gravida ac, laoreet tristique augue. Maecenas dictum
+                                            lacus eu nunc porttitor, ut hendrerit arcu efficitur.</p>
+                                        <p>Aliquam ultricies nunc porta metus interdum mollis. Donec porttitor libero
+                                            augue, vehicula tincidunt lectus placerat a. Sed tincidunt dolor non sem
+                                            dictum dignissim. Nulla vulputate orci felis, ac ornare purus ultricies a.
+                                            Fusce euismod magna orci, sit amet aliquam turpis dignissim ac. In at tortor
+                                            at ligula pharetra sollicitudin. Sed tincidunt, purus eget laoreet
+                                            elementum, felis est pharetra ante, tincidunt feugiat libero enim sed risus.
+                                            Sed at leo sit amet mi bibendum aliquam. Interdum et malesuada fames ac ante
+                                            ipsum primis in faucibus. Praesent cursus varius odio, non faucibus dui.
+                                            Nunc vehicula lectus sed velit suscipit aliquam vitae eu ipsum. adipiscing
+                                            elit.</p>
+                                    </div>
+                                </div>
+                                <div class="tab-pane fade" id="two" role="tabpanel" aria-labelledby="two-tab">
+                                    <div class="features-info mb-50">
+                                        <h3 class="heading-2">Features</h3>
+                                        <div class="row">
+                                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                                <ul>
+                                                    <li>
+                                                        Adaptive Cruise Control
+                                                    </li>
+                                                    <li>
+                                                        Airbags
+                                                    </li>
+                                                    <li>
+                                                        Air Conditioning
+                                                    </li>
+                                                    <li>
+                                                        Alarm System
+                                                    </li>
+                                                    <li>
+                                                        Anti-theft Protection
+                                                    </li>
+                                                    <li>
+                                                        Audio Interface
+                                                    </li>
+                                                    <li>
+                                                        Automatic Climate Control
+                                                    </li>
+                                                    <li>
+                                                        Automatic Headlights
+                                                    </li>
+                                                    <li>
+                                                        Auto Start/Stop
+                                                    </li>
+                                                    <li>
+                                                        Bi-Xenon Headlights
+                                                    </li>
+                                                    <li>
+                                                        Audio Interface
+                                                    </li>
+                                                    <li>
+                                                        Bluetooth Handset
+                                                    </li>
+                                                    <li>
+                                                        BOSE Surround Sound
+                                                    </li>
+                                                    <li>
+                                                        Burmester Surround Sound
+                                                    </li>
+                                                    <li>
+                                                        CD/DVD Autochanger
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                                <ul>
+                                                    <li>
+                                                        CDR Audio
+                                                    </li>
+                                                    <li>
+                                                        Cruise Control
+                                                    </li>
+                                                    <li>
+                                                        Direct Fuel Injection
+                                                    </li>
+                                                    <li>
+                                                        Electric Parking Brake
+                                                    </li>
+                                                    <li>
+                                                        Floor Mats
+                                                    </li>
+                                                    <li>
+                                                        Garage Door Opener
+                                                    </li>
+                                                    <li>
+                                                        Leather Package
+                                                    </li>
+                                                    <li>
+                                                        Locking Rear Differential
+                                                    </li>
+                                                    <li>
+                                                        Luggage Compartments
+                                                    </li>
+                                                    <li>
+                                                        Manual Transmission
+                                                    </li>
+                                                    <li>
+                                                        Navigation Module
+                                                    </li>
+                                                    <li>
+                                                        Online Services
+                                                    </li>
+                                                    <li>
+                                                        ParkAssist
+                                                    </li>
+                                                    <li>
+                                                        Porsche Communication
+                                                    </li>
+                                                    <li>
+                                                        CD/DVD Autochanger
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                                <ul>
+                                                    <li>
+                                                        Power Steering
+                                                    </li>
+                                                    <li>
+                                                        Reversing Camera
+                                                    </li>
+                                                    <li>
+                                                        Roll-over Protection
+                                                    </li>
+                                                    <li>
+                                                        Seat Heating
+                                                    </li>
+                                                    <li>
+                                                        Seat Ventilation
+                                                    </li>
+                                                    <li>
+                                                        Sound Package Plus
+                                                    </li>
+                                                    <li>
+                                                        Sport Chrono Package
+                                                    </li>
+                                                    <li>
+                                                        Steering Wheel Heating
+                                                    </li>
+                                                    <li>
+                                                        Tire Pressure Monitoring
+                                                    </li>
+                                                    <li>
+                                                        Universal Audio Interface
+                                                    </li>
+                                                    <li>
+                                                        Voice Control System
+                                                    </li>
+                                                    <li>
+                                                        Wind Deflector
+                                                    </li>
+                                                </ul>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
+
                             </div>
-                           
                         </div>
+
+
                     </div>
-                        
-                    
                 </div>
-            </div>
-            <div class="col-lg-4 col-md-12">
-                <div class="sidebar-right">
-                    <!-- Advanced search start -->
-                    <div class="widget advanced-search d-none-992">
-                       <!-- <button class="btn btn-outline-danger bomd btn-block btn-lg" data-toggle="modal" data-target="#inquiryModal">Send message</button><br> -->
+                <div class="col-lg-4 col-md-12">
+                    <div class="sidebar-right">
+                        <!-- Advanced search start -->
+                        <div class="widget advanced-search d-none-992">
+                            <!-- <button class="btn btn-outline-danger bomd btn-block btn-lg" data-toggle="modal" data-target="#inquiryModal">Send message</button><br> -->
 
-                        <h3 class="sidebar-title">Refine Your Search</h3>
-                        <ul>
-                            <li>
-                                <span>Body Style:</span>Convertible
-                            </li>
-                            <li>
-                                <span>Engine:</span>3.4L Mid-Engine V6
-                            </li>
-                            <li>
-                                <span>Transmission:</span>6-speed Manual
-                            </li>
-                            <li>
-                                <span>Drivetrain:</span>Rear Wheel Drive
-                            </li>
-                            <li>
-                                <span>Exaterion:</span>Lime Gold Metallic
-                            </li>
-                            <li>
-                                <span>Interior:</span>Agate Grey
-                            </li>
-                            <li>
-                                <span>Miles:</span>12
-                            </li>
-                            <li>
-                                <span>Doors:</span>2
-                            </li>
-                            <li>
-                                <span>Passengers:</span>2
-                            </li>
-                            <li>
-                                <span>Vin #:</span>WP0AB2E81EK190171
-                            </li>
-                            <li>
-                                <span>Fuel Mileage:</span>20 City / 28 Hwy
-                            </li>
-                            <li>
-                                <span>Fuel Type:</span>Gasoline
-                            </li>
-                            <li>
-                                <span>Vin #:</span>WP0AB2E81EK190171
-                            </li>
-
-                            <li>
-                                <span>Condition:</span>Brand New
-                            </li>
-                            <li>
-                                <span>Owners:</span>N/A
-                            </li>
-                            <li>
-                                <span>Waeeanty:</span>3 Years Limited
-                            </li>
-                        </ul>
-                    </div>
-
-                    <!-- modello invio messaggio dal dettaglio macchina
-
-                    <div class="modal fade" id="inquiryModal" role="dialog">
-                      <div class="modal-dialog">
-                        <div class="modal-content">
-                          <div class="contact-dealer modal-header">
-                             <h5 class="modal-title" id="inquiryModalLabel">Contact Dealer</h5>
-                            <img src="{% static 'img/Chat_logo.png' %}" alt="logo" class="img-fluid">
-                            <button type="button" class="close" data-dismiss="modal">
-                              <span>&times;</span>
-                            </button>
-                          </div>
-                          <div class="modal-body">
-                            <form action="#">
-                                <div class="form-group">
-                                  <label for="name" class="col-form-label">Hello, My Name is</label>
-                                  <div class="row">
-                                    <div class="col">
-                                      <input type="text" name="first_name" class="form-control" placeholder="First Name" required>
-                                    </div>
-                                    <div class="col">
-                                      <input type="text" name="last_name" class="form-control" placeholder="Last Name" required>
-                                    </div>
-                                  </div>
-                                </div>
-                                  <div class="form-group">
-                                      <select class="form-control" id="sel1" name="customer_need">
-                                        <option value="I'm interested in this">I'm interested in this</option>
-                                        <option value="I'd like to know your best price for this">I'd like to know your best price for this</option>
-                                        <option value="I'd like to test drive this">I'd like to test drive this</option>
-                                        <option value="I'd like a history report for this">I'd like a history report for this</option>
-                                      </select>
-                                    </div>
-                                
-                                <div class="form-group">
-                                  <input type="text" name="car_title" class="form-control" value="LAMBORGHINI HURACÁN." readonly>
-                                </div>
-                               
-                                <div class="form-group">
-                                  <label for="name" class="col-form-label">I live in</label>
-                                  <div class="row">
-                                    <div class="col">
-                                      <input type="text" name="city" class="form-control" placeholder="City" required>
-                                    </div>
-                                    <div class="col">
-                                      <input type="text" name="state" class="form-control" placeholder="State" required>
-                                    </div>
-                                  </div>
-                                </div>
-
-                                <div class="form-group">
-                                  <div class="row">
-                                    <div class="col">
-                                        <label for="name" class="col-form-label">You can reach me by email at</label>
-                                      <input type="email" name="email" class="form-control" placeholder="Email Address" required>
-                                    </div>
-                                    <div class="col">
-                                        <label for="phone" class="col-form-label">or by phone at</label>
-                                      <input type="text" name="phone" placeholder="Phone Number (optional)" class="form-control">
-                                    </div>
-                                  </div>
-                                </div>
-
-                                <div class="form-group">
-                                  <label for="message" class="col-form-label">Add comments</label>
-                                  <textarea name="message" class="form-control" placeholder="Enter your message here (optional)"></textarea>
-                                </div>
-                                <hr>
-                                <input type="submit" value="Send" class="btn btn-block btn-danger">
-                            </form>
-                          </div>
-                        </div>
-                      </div>
-                    </div>-->
-                    <!-- Question start -->
-                    <div class="widget question">
-                        <h5 class="sidebar-title">Get a Question?</h5>
-                        <ul class="contact-info">
-                            <li>
-                                <i class="flaticon-pin"></i>20/F Green Road, Dhanmondi
-                            </li>
-                            <li>
-                                <i class="flaticon-mail"></i><a href="mailto:info@themevessel.com">info@themevessel.com</a>
-                            </li>
-                            <li>
-                                <i class="flaticon-phone"></i><a href="tel:+0477-85x6-552">+0477 85x6 552</a>
-                            </li>
-                        </ul>
-                        <div class="social-list clearfix">
+                            <h3 class="sidebar-title">Refine Your Search</h3>
                             <ul>
-                                <li><a href="#" class="facebook-bg"><i class="fa fa-facebook"></i></a></li>
-                                <li><a href="#" class="twitter-bg"><i class="fa fa-twitter"></i></a></li>
-                                <li><a href="#" class="google-bg"><i class="fa fa-google-plus"></i></a></li>
-                                <li><a href="#" class="rss-bg"><i class="fa fa-rss"></i></a></li>
-                                <li><a href="#" class="linkedin-bg"><i class="fa fa-linkedin"></i></a></li>
+                                <li>
+                                    <span>Body Style:</span>Convertible
+                                </li>
+                                <li>
+                                    <span>Engine:</span>3.4L Mid-Engine V6
+                                </li>
+                                <li>
+                                    <span>Transmission:</span>6-speed Manual
+                                </li>
+                                <li>
+                                    <span>Drivetrain:</span>Rear Wheel Drive
+                                </li>
+                                <li>
+                                    <span>Exaterion:</span>Lime Gold Metallic
+                                </li>
+                                <li>
+                                    <span>Interior:</span>Agate Grey
+                                </li>
+                                <li>
+                                    <span>Miles:</span>12
+                                </li>
+                                <li>
+                                    <span>Doors:</span>2
+                                </li>
+                                <li>
+                                    <span>Passengers:</span>2
+                                </li>
+                                <li>
+                                    <span>Vin #:</span>WP0AB2E81EK190171
+                                </li>
+                                <li>
+                                    <span>Fuel Mileage:</span>20 City / 28 Hwy
+                                </li>
+                                <li>
+                                    <span>Fuel Type:</span>Gasoline
+                                </li>
+                                <li>
+                                    <span>Vin #:</span>WP0AB2E81EK190171
+                                </li>
+
+                                <li>
+                                    <span>Condition:</span>Brand New
+                                </li>
+                                <li>
+                                    <span>Owners:</span>N/A
+                                </li>
+                                <li>
+                                    <span>Waeeanty:</span>3 Years Limited
+                                </li>
                             </ul>
                         </div>
+                        <!-- Question start -->
+                        <div class="widget question">
+                            <h5 class="sidebar-title">Get a Question?</h5>
+                            <ul class="contact-info">
+                                <li>
+                                    <i class="flaticon-pin" style="color: #007bff"></i>20/F Green Road, Dhanmondi
+                                </li>
+                                <li>
+                                    <i class="flaticon-mail" style="color: #007bff"></i><a href="mailto:info@themevessel.com">info@themevessel.com</a>
+                                </li>
+                                <li>
+                                    <i class="flaticon-phone" style="color: #007bff"></i><a href="tel:+0477-85x6-552">+0477 85x6 552</a>
+                                </li>
+                            </ul>
+                            <div class="social-list clearfix">
+                                <ul>
+                                    <li><a href="#" class="facebook-bg"><i class="fa fa-facebook"></i></a></li>
+                                    <li><a href="#" class="twitter-bg"><i class="fa fa-twitter"></i></a></li>
+                                    <li><a href="#" class="google-bg"><i class="fa fa-google-plus"></i></a></li>
+                                    <li><a href="#" class="rss-bg"><i class="fa fa-rss"></i></a></li>
+                                    <li><a href="#" class="linkedin-bg"><i class="fa fa-linkedin"></i></a></li>
+                                </ul>
+                            </div>
+                        </div>
+
                     </div>
-                    
                 </div>
             </div>
         </div>
     </div>
-</div>
-<!-- Properties details page end -->
+    <!-- Properties details page end -->
+    <style>
+        * Forza la tab inattiva: bianca con testo blu *
 
+        /
+        .tabbing-box .nav-tabs .nav-link {
+            background-color: white !important;
+            color: #007bff !important;
+            border: 1px solid #007bff !important;
+        }
+
+        /* Tab attiva: sfondo blu, testo bianco */
+        .tabbing-box .nav-tabs .nav-link.active,
+        .tabbing-box .nav-tabs .nav-item.show .nav-link {
+            background-color: #007bff !important;
+            color: white !important;
+        }
+
+        /* Hover su tab inattiva: sfondo blu, testo bianco */
+        .tabbing-box .nav-tabs .nav-link:hover:not(.active) {
+            background-color: #007bff !important;
+            color: white !important;
+        }
+    </style>
 {% endblock content %}

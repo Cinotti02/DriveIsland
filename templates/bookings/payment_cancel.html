@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container mt-5 text-center">
+    <h2 class="text-danger"> Pagamento annullato</h2>
+    <p class="mt-3">Sembra che tu abbia annullato il pagamento.</p>
+    <p>La tua prenotazione non è ancora confermata. Puoi riprovare a completare il pagamento in qualsiasi momento dalla tua area personale.</p>
+
+    <a href="{% url 'dashboard' %}" class="btn btn-secondary mt-4">Torna alla Dashboard</a>
+</div>
+{% endblock %}

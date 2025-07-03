@@ -1,0 +1,104 @@
+{% load static %}
+
+<!-- Our team start -->
+<div class="our-team content-area bg-grea-3">
+    <div class="container">
+        <!-- Main title -->
+        <div class="main-title">
+            <h1>Executive <span style="color:#007bff">Team</span></h1>
+            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod</p>
+        </div>
+        <!-- Slick slider area start -->
+        <div class="slick-slider-area clearfix">
+            {% if team|length >= 4 %}
+                <div class="row slick-carousel"
+                     data-slick='{"slidesToShow": 4,
+                              "centerMode": true,
+                              "centerPadding": "0",
+                              "infinite": true,
+                              "responsive":[
+                                     {"breakpoint": 1024,"settings":{"slidesToShow": 2, "centerMode": true}},
+                                     {"breakpoint": 992, "settings":{"slidesToShow": 3, "centerMode": true}},
+                                     {"breakpoint": 768, "settings":{"slidesToShow": 1, "centerMode": true}}]}'>
+                    {% for membro in team %}
+                        <div class="slick-slide-item">
+                            <div class="team-1">
+                                <div class="photo">
+                                    <a href="#">
+                                        {% if membro.photo.url %}
+                                            <img src="{{ membro.photo.url }}" alt="{{ membro.first_name }}"
+                                                 class="img-fluid ">
+                                        {% else %}
+                                            <img src="{% static 'img/avatar/avatar-12.jpg' %}" alt="team-1"
+                                                 class="img-fluid">
+                                        {% endif %}
+                                    </a>
+                                    <!--<div class="social-list clearfix">
+                                        <a href="{{ membro.facebook_link }}" class="facebook-bg"><i class="fa fa-facebook"></i></a>
+                                        <a href="{{ membro.twitter_link }}" class="twitter-bg"><i class="fa fa-twitter"></i></a>
+                                        <a href="{{ membro.google_link }}" class="google-bg"><i class="fa fa-google"></i></a>
+                                    </div>-->
+                                </div>
+                                <div class="details">
+                                    <h4><a href="#">{{ membro.first_name }} {{ membro.last_name }}</a></h4>
+                                    <h5>{{ membro.designation }}</h5>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+
+            {% else %}
+                <div class="flex-center-team">
+                    {% for membro in team %}
+                        <div class="slick-slide-item">
+                            <div class="team-1">
+                                <div class="photo">
+                                    <a href="#">
+                                        {% if membro.photo.url %}
+                                            <img src="{{ membro.photo.url }}" alt="{{ membro.first_name }}"
+                                                 class="img-fluid">
+                                        {% else %}
+                                            <img src="{% static 'img/avatar/avatar-12.jpg' %}" alt="team"
+                                                 class="img-fluid">
+                                        {% endif %}
+                                    </a>
+                                    <div class="social-list clearfix">
+                                        <a href="{{ membro.facebook_link }}" class="facebook-bg"><i
+                                                class="fa fa-facebook"></i></a>
+                                        <a href="{{ membro.twitter_link }}" class="twitter-bg"><i
+                                                class="fa fa-twitter"></i></a>
+                                        <a href="{{ membro.google_link }}" class="google-bg"><i
+                                                class="fa fa-google"></i></a>
+                                    </div>
+                                </div>
+                                <div class="details">
+                                    <h4><a href="#">{{ membro.first_name }} {{ membro.last_name }}</a></h4>
+                                    <h5>{{ membro.designation }}</h5>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+            {% if team|length >= 4 %}
+                <div class="slick-btn">
+                    <div class="slick-prev slick-arrow-buton sab-4" style="color: #007bff">
+                        <i class="fa fa-angle-left"></i>
+                    </div>
+                    <div class="slick-next slick-arrow-buton sab-3" style="color: #007bff">
+                        <i class="fa fa-angle-right"></i>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<style>
+    .slick-arrow-buton:hover {
+            background: #007bff;
+            color: white !important;
+        }
+</style>
+<!-- Our team end -->

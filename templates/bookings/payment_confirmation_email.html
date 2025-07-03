@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>Conferma pagamento - DriveIsland</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f6f8fa;
+            color: #333;
+            padding: 20px;
+        }
+        .container {
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 8px;
+            max-width: 600px;
+            margin: auto;
+            box-shadow: 0 0 10px rgba(0,0,0,0.05);
+        }
+        h2 {
+            color: #007bff;
+        }
+        .info {
+            margin-top: 20px;
+            line-height: 1.6;
+        }
+        .footer {
+            margin-top: 30px;
+            font-size: 0.9em;
+            color: #888;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>✅ Prenotazione confermata!</h2>
+        <p>Ciao {{ booking.user.first_name }},</p>
+
+        <p>Grazie per aver prenotato con <strong>DriveIsland</strong>.</p>
+
+        <div class="info">
+            <p><strong>Auto:</strong> {{ booking.car.model }} ({{ booking.car.category }})</p>
+            <p><strong>Ritiro:</strong> {{ booking.start_date }} alle {{ booking.start_time }}</p>
+            <p><strong>Riconsegna:</strong> {{ booking.end_date }} alle {{ booking.end_time }}</p>
+            <p><strong>Luogo ritiro:</strong> {{ booking.pickup_location }}</p>
+            <p><strong>Luogo riconsegna:</strong> {{ booking.dropoff_location }}</p>
+            <p><strong>Importo pagato:</strong> {{ booking.total_price }} €</p>
+        </div>
+
+        <p>Puoi consultare i dettagli nella tua <a href="{{ dashboard_url }}">dashboard personale</a>.</p>
+
+        <div class="footer">
+            <p>DriveIsland - Il miglior noleggio auto per le tue vacanze</p>
+            <p>© {{ current_year }} DriveIsland. Tutti i diritti riservati.</p>
+        </div>
+    </div>
+</body>
+</html>

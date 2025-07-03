@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+    <div class="featured-car content-area" style="height: 100%">
+        <div class="container my-5">
+            <div class="card shadow">
+                <div class="card-header bg-danger text-white" style="background-color: #007bff !important;">
+                    <h4 class="text-white text-center mb-0">Annullamento Prenotazione</h4>
+                </div>
+                <div class="card-body">
+                    <p class="text-center">
+                        Sei sicuro di voler <strong>annullare</strong> la prenotazione per:
+                    </p>
+                    <ul class="list-group mb-3">
+                        <li class="list-group-item">
+                            <strong>Auto:</strong> {{ booking.car.model }}
+                        </li>
+                        <li class="list-group-item">
+                            <strong>Utente:</strong> {{ booking.user.get_full_name|default:booking.user.username }}
+                        </li>
+                        <li class="list-group-item">
+                            <strong>Periodo:</strong> {{ booking.start_date }} → {{ booking.end_date }}
+                        </li>
+                        <li class="list-group-item">
+                            <strong>Prezzo Totale:</strong> € {{ booking.total_price }}
+                        </li>
+                    </ul>
+
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label for="reason" class="form-label">Motivazione dell'annullamento</label>
+                            <div class="mb-2">
+                                <span class="me-2">Inserisci variabili:</span>
+                                <button type="button" class="btn btn-sm btn-outline-secondary insert-tag"
+                                        data-tag="{{ booking.user }}">{{ booking.user }}</button>
+                                <button type="button" class="btn btn-sm btn-outline-secondary insert-tag"
+                                        data-tag="{{ booking.car.model }}">Auto
+                                </button>
+                                <button type="button" class="btn btn-sm btn-outline-secondary insert-tag"
+                                        data-tag="{{ booking.start_date }}">Data Inizio
+                                </button>
+                            </div>
+
+                            <textarea name="reason" id="reasonField" class="form-control" rows="5" required></textarea>
+
+                        </div>
+                        <div class="d-flex justify-content-between">
+                            <a href="{% url 'admin_booking' %}" class="btn btn-secondary">
+                                <i class="fa fa-chevron-left"></i> Torna indietro
+                            </a>
+                            <button type="submit" class="btn btn-primary" >
+                                <i class="fa fa-trash"></i> Conferma Annullamento
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+    document.querySelectorAll('.insert-tag').forEach(btn => {
+        btn.addEventListener('click', function () {
+            const tag = this.getAttribute('data-tag');
+            const textarea = document.getElementById('reasonField');
+            const start = textarea.selectionStart;
+            const end = textarea.selectionEnd;
+            const text = textarea.value;
+            const insert = `${tag}`;
+            textarea.value = text.slice(0, start) + insert + text.slice(end);
+            textarea.focus();
+            textarea.setSelectionRange(start + insert.length, start + insert.length);
+        });
+    });
+</script>
+{% endblock %}

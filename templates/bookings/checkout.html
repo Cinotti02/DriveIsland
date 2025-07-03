@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<!-- Checkout section start -->
+<div class="featured-car content-area" style="padding: 0!important;">
+    <div class="contact-section">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="form-section" style="padding-top: 5px">
+                        <div class="logo-2 text-center">
+                            <a href="{% url 'home' %}">
+                                <img src="{% static 'img/Chat_logo2.png' %}" alt="logo" style="height: 120px">
+                            </a>
+                        </div>
+
+                        <h3 class="text-center">Riepilogo prenotazione</h3>
+
+                        <hr>
+
+                        <h4 class="mt-4">Dettagli auto</h4>
+                        <div class="text-left mt-2">
+                            <p><strong>Modello:</strong> {{ booking.car.model }}</p>
+                            <p><strong>Categoria:</strong> {{ booking.car.category }}</p>
+                            <p><strong>Colore:</strong> {{ booking.car.color }}</p>
+                            <p><strong>Carburante:</strong> {{ booking.car.fuel_type }}</p>
+                            <p><strong>Cambio:</strong> {{ booking.car.gearbox }}</p>
+                        </div>
+
+                        <hr>
+
+                        <h4 class="mt-4">Dettagli prenotazione</h4>
+                        <div class="text-left mt-2">
+                            <p><strong>Ritiro:</strong> {{ booking.start_date }} alle {{ booking.start_time }}</p>
+                            <p><strong>Riconsegna:</strong> {{ booking.end_date }} alle {{ booking.end_time }}</p>
+                            <p><strong>Luogo di ritiro:</strong> {{ booking.pickup_location }}</p>
+                            <p><strong>Luogo di riconsegna:</strong> {{ booking.dropoff_location }}</p>
+                            {% if booking.notes %}
+                                <p><strong>Note:</strong> {{ booking.notes }}</p>
+                            {% endif %}
+                        </div>
+
+                        <hr>
+
+                        <h4 class="mt-4">Prezzo totale</h4>
+                        <p class="fs-5"><strong>{{ booking.total_price }} €</strong></p>
+
+                        <div class="d-flex justify-content-center gap-3 mt-4 flex-wrap">
+                            <a href="{% url 'start_payment' booking.id %}" class="btn btn-success btn-lg" style="margin-right: 20px">Paga ora</a>
+
+                            <form method="post" action="{% url 'cancel_unpaid_booking' booking.id %}" onsubmit="return confirm('Sei sicuro di voler annullare questa prenotazione?');">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-danger btn-lg" style="margin-left: 20px">Annulla prenotazione</button>
+                            </form>
+                        </div>
+
+                        <p class="mt-4 text-center text-muted">
+                            Puoi completare il pagamento ora oppure tornare alla tua <a href="{% url 'dashboard' %}">Dashboard</a>.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Checkout section end -->
+{% endblock %}

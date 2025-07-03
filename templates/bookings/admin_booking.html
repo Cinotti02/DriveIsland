@@ -1,0 +1,158 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load widget_tweaks %}
+
+{% block content %}
+
+    <!-- Sub banner start -->
+    <div class="sub-banner overview-bgi">
+        <div class="container breadcrumb-area">
+            <div class="breadcrumb-areas">
+                <h1>Bookings</h1>
+                <ul class="breadcrumbs">
+                    <li><a href="{% url 'home' %}">Home</a></li>
+                    <li class="active">Bookings</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!-- Sub Banner end -->
+
+    <div class="container">
+        <div class="d-flex justify-content-between align-items-center mb-4 mt-5">
+            <h2 class="mb-0">
+                <i class="fa fa-calendar-check-o me-2 text-primary"></i>
+                Gestione Prenotazioni
+            </h2>
+            <a href="{% url 'admin_booking' %}" class="btn btn-outline-secondary">
+                <i class="fa fa-refresh"></i> Reset
+            </a>
+        </div>
+
+        <!-- Form di filtro -->
+        <form method="get" class="row align-items-end  mb-3 mt-5">
+
+            <div class="col-md-3 mb-3">
+                <label for="{{ form.car.id_for_label }}" class="mr-2 font-weight-bold">{{ form.car.label }}</label>
+                {{ form.car|add_class:"form-control" }}
+            </div>
+            <div class="col-md-3 mb-3 ">
+                <label class="mr-2 font-weight-bold">{{ form.user.label }}</label>
+                {{ form.user|add_class:"form-control" }}
+            </div>
+
+            <div class="col-md-2 mb-3 ">
+                <label for="{{ form.date.id_for_label }}" class="mr-2 font-weight-bold">{{ form.date.label }}</label>
+                {{ form.date|add_class:"form-control" }}
+            </div>
+
+            <div class="col-md-2 mb-3">
+                <label for="status" class="form-label">Stato</label>
+                <select name="status" id="status" class="form-control">
+                    <option value="">Tutti</option>
+                    <option value="past" {% if request.GET.status == 'past' %}selected{% endif %}>Completate</option>
+                    <option value="current" {% if request.GET.status == 'current' %}selected{% endif %}>In corso
+                    </option>
+                    <option value="future" {% if request.GET.status == 'future' %}selected{% endif %}>Future</option>
+                </select>
+            </div>
+            <div class="col-md-2 mb-3">
+                <button type="submit" class="btn btn-primary w-100">
+                    Filtra
+                </button>
+            </div>
+        </form>
+
+        <!-- Tabella prenotazioni -->
+        <div class="table-responsive" style="margin: 0!important;">
+            <table class="table table-hover table-bordered align-middle">
+                <thead class="thead-dark">
+                <tr>
+                    <th>Auto</th>
+                    <th>Utente</th>
+                    <th>Dal</th>
+                    <th>Al</th>
+                    <th>Stato</th>
+                    <th>Prezzo Totale</th>
+                    <th>Creata il</th>
+                    <th>Nota</th>
+                    <th>Azioni</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for booking in bookings %}
+
+                    <tr data-status="{% if now < booking.start_datetime %}future{% elif now >= booking.start_datetime and now <= booking.end_datetime %}current{% else %}past{% endif %}"
+                        class="{% if now < booking.start_datetime %} table-light {% elif now <= booking.end_datetime %}table-warning {% else %} table-dark text-dark{% endif %}">
+                        <td style="border: 1px solid #dee2e6">
+                            <i class="fa fa-car text-secondary me-1"></i>
+                            {{ booking.car.model }}
+                        </td>
+                        <td style="border: 1px solid #dee2e6">{{ booking.user.get_full_name|default:booking.user.username }}</td>
+                        <td style="border: 1px solid #dee2e6">
+                            <span class="badge bg-info text-dark">{{ booking.start_date }}</span>
+                        </td>
+                        <td style="border: 1px solid #dee2e6">
+                            <span class="badge bg-info text-dark">{{ booking.end_date }}</span>
+                        </td>
+                        <td style="border: 1px solid #dee2e6">
+                            {% if now < booking.start_datetime %}
+                                <span class="badge bg-success">Future</span>
+                            {% elif now <= booking.end_datetime %}
+                                <span class="badge bg-warning">In Corso</span>
+                            {% else %}
+                                <span class="badge bg-danger">Completata</span>
+                            {% endif %}
+                        </td>
+                        <td style="border: 1px solid #dee2e6">
+                            <strong>€ {{ booking.total_price }}</strong>
+                        </td>
+                        <td style="border: 1px solid #dee2e6">{{ booking.created_at|date:"d/m/Y H:i" }}</td>
+                        <td style="border: 1px solid #dee2e6">
+                            {% if booking.notes %}
+                            <button class="btn  btn-primary"
+                                    type="button"
+                                    data-toggle="collapse"
+                                    data-target="#msg-{{ booking.notes }}">
+                                Leggi
+                            </button>
+                            {% endif %}
+                        </td>
+                        <td style="border: 1px solid #dee2e6">
+                            {% if booking.start_datetime > now %}
+                                <a href="{% url 'cancel_booking' booking.id %}" class="btn btn-danger btn-sm">
+                                    <i class="fa fa-times"></i> Cancella
+                                </a>
+                            {% endif %}
+                        </td>
+
+                    </tr>
+                    <tr id="msg-{{ booking.notes }}" class="collapse">
+                            <td colspan="9">
+                                {% if msg.reply %}
+                                    <strong>Risposta:</strong>
+                                    <br><br>
+                                    <div class="bg-light p-3 rounded border">
+                                        {{ msg.reply|linebreaksbr }}
+                                        <p class="text-muted small mt-2 mb-0">Risposto
+                                            il {{ msg.replied_at|date:"d/m/Y H:i" }}</p>
+                                    </div>
+                                    <hr>
+                                {% endif %}
+
+                                <strong>Messaggio ricevuto:</strong><br><br>
+                                <div class="bg-light p-3 rounded border">
+                                    {{ booking.notes|linebreaksbr }}
+                                </div>
+                            </td>
+                        </tr>
+                {% empty %}
+                    <tr>
+                        <td colspan="6" class="text-center text-muted">Nessuna prenotazione trovata.</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}

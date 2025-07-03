@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<!-- Payment success section start -->
+<div class="featured-car content-area" style="padding: 0!important;">
+    <div class="contact-section">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="form-section" style="padding-top: 5px">
+                        <div class="logo-2 text-center">
+                            <a href="{% url 'home' %}">
+                                <img src="{% static 'img/Chat_logo2.png' %}" alt="logo" style="height: 120px">
+                            </a>
+                        </div>
+
+                        <h3 class="text-success mt-4" style="margin-top: 0!important"> Pagamento completato con successo!</h3>
+                        <p class="text-center text-muted mb-3">
+                            Grazie per aver prenotato con <strong>DriveIsland</strong>.<br>
+                            Riceverai a breve una conferma via email con tutti i dettagli.
+                        </p>
+
+                        <hr>
+
+                        <h4 class="mt-4">Dettagli prenotazione</h4>
+                        <div class="text-left mt-3">
+                            <p><strong>Auto:</strong> {{ booking.car.model }}</p>
+                            <p><strong>Dal:</strong> {{ booking.start_date }} alle {{ booking.start_time }}</p>
+                            <p><strong>Al:</strong> {{ booking.end_date }} alle {{ booking.end_time }}</p>
+                            <p><strong>Totale pagato:</strong> {{ booking.total_price }} €</p>
+                        </div>
+
+                        <div class="form-group mb-0 mt-4 clearfix text-center">
+                            <a href="{% url 'dashboard' %}" class="btn-md btn-theme w-100" style="background: #007bff">Vai alla Dashboard</a>
+                        </div>
+
+                        <p class="mt-4 text-center">
+                            Hai bisogno di aiuto? <a href="{% url 'contact' %}" class="thembo">Contattaci</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Payment success section end -->
+{% endblock %}
