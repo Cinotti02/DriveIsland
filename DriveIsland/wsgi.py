@@ -17,6 +17,9 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'DriveIsland.settings')
 django.setup()
 application = get_wsgi_application()
 try:
+    print("=== FILE NELLA DIRECTORY ===")
+    for f in os.listdir():
+        print(f)
 
     call_command('migrate', interactive=False)
     print("== MIGRAZIONI OK ==")
