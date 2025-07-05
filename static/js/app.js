@@ -108,19 +108,19 @@ $(function () {
                     $('.sticky-header').addClass('header-shrink');
                 }
                 if($('.do-sticky').length < 1) {
-                    $('.company-logo img').attr('src', 'staticfiles/img/Chat_logo2.png');
+                    $('.company-logo img').attr('src', 'static/img/Chat_logo2.png');
                 }
             }
             else {
                 $('.sticky-header').removeClass('header-shrink');
                 if($('.do-sticky').length < 1 && $('.fixed-header').length == 0 && $('.fixed-header2').length == 0) {
-                    $('.company-logo img').attr('src', 'staticfiles/img/Chat_logo2.png');
+                    $('.company-logo img').attr('src', 'static/img/Chat_logo2.png');
                 } else {
-                    $('.company-logo img').attr('src', 'staticfiles/img/Chat_logo2.png');
+                    $('.company-logo img').attr('src', 'static/img/Chat_logo2.png');
                 }
             }
         } else {
-            $('.company-logo img').attr('src', 'staticfiles/img/logos/Chat_logo2.png');
+            $('.company-logo img').attr('src', 'static/img/logos/Chat_logo2.png');
         }
     }
 
