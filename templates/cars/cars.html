@@ -1,17 +1,9 @@
 {% extends 'base.html' %}
-
+{% load static %}
 {% block content %}
 
-    {% load static %}
 
 
-    <!-- Google Tag Manager (noscript) -->
-    <noscript>
-        <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NX5VQP"
-                height="0" width="0" style="display:none;visibility:hidden"></iframe>
-    </noscript>
-    <!-- End Google Tag Manager (noscript) -->
-    <div class="page_loader"></div>
 
     <!-- Sub banner start -->
     <div class="sub-banner overview-bgi">
@@ -101,14 +93,16 @@
                                         </div>
                                     </a>
                                     <div class="widget advanced-search2" style="padding-top: 10px">
-                                        <a class="btn btn-primary d-block mx-auto search-button" style="background: #00aced"
+                                        <a class="btn btn-primary d-block mx-auto search-button"
+                                           style="background: #00aced"
                                            href="{% url 'create_booking' %}?car={{ car.id }}">
                                             Prenota ora
                                         </a>
                                     </div>
                                     {% if is_admin %}
                                         <div class="widget advanced-search2">
-                                            <a class="btn btn-danger d-block mx-auto search-button" style="background: #00aced"
+                                            <a class="btn btn-danger d-block mx-auto search-button"
+                                               style="background: #00aced"
                                                href="{% url 'edit_car' car_id=membro.pk %}">
                                                 Modifica
                                             </a>
@@ -211,7 +205,8 @@
                         <div class="sidebar-right">
                             <div class="widget advanced-search2">
                                 <div class="mb-4 text-end">
-                                    <a href="{% url 'add_car' %}" class="btn search-button btn-success d-block mx-auto" style="background: #00aced">
+                                    <a href="{% url 'add_car' %}" class="btn search-button btn-success d-block mx-auto"
+                                       style="background: #00aced">
                                         <i class="fa fa-plus me-1" style="margin-right: 10px"></i> Aggiungi nuova
                                         macchina
                                     </a>
@@ -227,15 +222,15 @@
 
     <style>
         .ui-slider .ui-slider-range {
-    background: #007bff !important;
-}
+            background: #007bff !important;
+        }
 
-/* Cambia il colore del cursore (handle) */
-.ui-slider .ui-slider-handle {
-    border-color: #007bff !important;
-    background: #007bff !important;
-}
+        /* Cambia il colore del cursore (handle) */
+        .ui-slider .ui-slider-handle {
+            border-color: #007bff !important;
+            background: #007bff !important;
+        }
 
-</style>
+    </style>
 
 {% endblock %}
