@@ -15,13 +15,11 @@ from django.core.wsgi import get_wsgi_application
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'DriveIsland.settings')
 
 django.setup()
-
-django.setup()
+application = get_wsgi_application()
 try:
     call_command('migrate', interactive=False)
-    if os.environ.get('INITIAL_LOAD') == 'True':
-        call_command('loaddata', 'backup.json')
+    call_command('loaddata', 'backup.json', verbosity=2)
 except Exception as e:
-    print(f"Errore durante migrazioni o caricamento dati: {e}")
-
-application = get_wsgi_application()
+    import traceback
+    print("=== ERRORE DURANTE IL DEPLOY ===")
+    traceback.print_exc()
