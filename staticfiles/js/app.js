@@ -120,7 +120,7 @@ $(function () {
                 }
             }
         } else {
-            $('.company-logo img').attr('src', 'static/img/logos/Chat_logo2.png');
+            $('.company-logo img').attr('src', 'static/img/Chat_logo2.png');
         }
     }
 
