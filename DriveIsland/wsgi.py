@@ -26,6 +26,7 @@ try:
     call_command('loaddata', 'backup.json', verbosity=2)
     print("== BACKUP IMPORTATO CON SUCCESSO ==")
 except Exception as e:
-
     print("=== ERRORE DURANTE IL DEPLOY / LOADDATA ===")
+
     traceback.print_exc()
+    print(f"Errore specifico: {e}")
