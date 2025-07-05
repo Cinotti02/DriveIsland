@@ -1,5 +1,4 @@
 {% extends 'base.html' %}
-{% load cloudinary %}
 
 {% block content %}
 
@@ -53,13 +52,13 @@
                             <!-- main slider carousel items-->
                             <div class="carousel-inner">
                                 <div class="carousel-item active">
-                                    {% cloudinary car.image_principal width=750 height=500 crop="fill" %}
+                                    <img src="{{ car.image_principal.url|add:'?c_fill,w_750,h_500'  }}" class="img-fluid"
                                          alt="Immagine principale">
                                 </div>
                                 <!-- Immagini secondarie -->
                                 {% for image in car.gallery.all %}
                                     <div class="carousel-item">
-                                        <img src="{{ image.image.url }}" class="img-fluid"
+                                        <img src="{{ image.image.url|add:'?c_fill,w_750,h_500' }}" class="img-fluid"
                                              alt="Immagine secondaria {{ forloop.counter }}">
                                     </div>
                                 {% endfor %}
@@ -70,13 +69,14 @@
                                     <li class="list-inline-item active" style="background: #007bff">
                                         <a id="carousel-selector-0" class="selected" data-slide-to="0"
                                            data-target="#carDetailsSlider">
-                                            {% cloudinary membro.image_principal width=750 height=500 crop="fill" class="img-fluid" alt="Thumb principale" %}
+                                            <img src="{{ car.image_principal.url|add:'?c_fill,w_750,h_500'  }}" class="img-fluid"
+                                                 alt="Thumb principale">
                                         </a>
                                     </li>
                                     {% for image in car.gallery.all %}
                                         <li class="list-inline-item">
                                             <a data-slide-to="{{ forloop.counter }}" data-target="#carDetailsSlider">
-                                                <img src="{{ image.image.url }}" class="img-fluid"
+                                                <img src="{{ image.image.url|add:'?c_fill,w_750,h_500' }}" class="img-fluid"
                                                      alt="Thumb {{ forloop.counter }}">
                                             </a>
                                         </li>
@@ -370,6 +370,9 @@
     </div>
     <!-- Properties details page end -->
     <style>
+        * Forza la tab inattiva: bianca con testo blu *
+
+        /
         .tabbing-box .nav-tabs .nav-link {
             background-color: white !important;
             color: #007bff !important;

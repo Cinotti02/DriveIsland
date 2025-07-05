@@ -61,18 +61,6 @@ class Car(models.Model):
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
 
-        # Percorso assoluto all'immagine salvata
-        if self.image_principal:
-            img_path = self.image_principal.path
-            try:
-                img = Image.open(img_path)
-                img = img.convert('RGB')
-                fixed_size = (750, 500)
-                img = img.resize(fixed_size)
-                img.save(img_path)
-            except Exception as e:
-                print(f"Errore nel ridimensionamento dell'immagine: {e}")
-
     def get_discounted_price(self):
         if self.discount_active and self.discount_percentage > 0:
             discount_factor = Decimal('1.0') - (Decimal(self.discount_percentage) / Decimal('100'))
@@ -86,6 +74,7 @@ class CarImage(models.Model):
 
     def __str__(self):
         return f"Image for {self.car.model}"
+
 
 # Elimina l'immagine principale se viene sostituita da una nuova
 @receiver(pre_save, sender=Car)

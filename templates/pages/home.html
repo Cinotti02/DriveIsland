@@ -133,7 +133,7 @@
                                                 <br>
                                                 <span style="color: #28a745; font-weight: 1000; font-size: 20px">{{ car.get_discounted_price|floatformat:2 }}€</span>
                                             </div>
-                                            <img class="d-block w-100" src="{{ car.image_principal.url }}" alt="car">
+                                            <img class="d-block w-100" src="{{ car.image_principal.url|add:'?c_fill,w_750,h_500'  }}" alt="car">
                                         </a>
                                         <div class="carbox-overlap-wrapper">
                                             <div class="overlap-box">
@@ -142,13 +142,13 @@
                                                         <!-- Immagine principale -->
                                                         <a href="{{ car.image_principal.url }}" class="overlap-btn">
                                                             <i class="fa fa-expand"></i>
-                                                            <img class="hidden" src="{{ car.image_principal.url }}"
+                                                            <img class="hidden" src="{{ car.image_principal.url|add:'?c_fill,w_750,h_500'  }}"
                                                                  alt="{{ car.model }}">
                                                         </a>
                                                         <!-- Immagini secondarie -->
                                                         {% for img in car.gallery.all %}
                                                             <a href="{{ img.image.url }}" class="hidden">
-                                                                {% cloudinary img.image width=750 height=500 crop="fill" class="hidden" alt=""%}>
+                                                                <img class="hidden" src="{{ img.image.url|add:'?c_fill,w_750,h_500' }}" alt="">
                                                             </a>
                                                         {% endfor %}
                                                     </div>
@@ -228,7 +228,7 @@
                                                     <span>{{ car.price_per_day }}€</span>
                                                 </div>
                                             {% endif %}
-                                            <img class="d-block w-100" src="{{ car.image_principal.url }}" alt="car">
+                                            <img class="d-block w-100" src="{{ car.image_principal.url|add:'?c_fill,w_750,h_500'  }}" alt="car">
                                         </a>
                                         <div class="carbox-overlap-wrapper">
                                             <div class="overlap-box">
@@ -237,13 +237,13 @@
                                                         <!-- Immagine principale -->
                                                         <a href="{{ car.image_principal.url }}" class="overlap-btn">
                                                             <i class="fa fa-expand"></i>
-                                                            <img class="hidden" src="{{ car.image_principal.url }}"
+                                                            <img class="hidden" src="{{ car.image_principal.url|add:'?c_fill,w_750,h_500'  }}"
                                                                  alt="{{ car.model }}">
                                                         </a>
                                                         <!-- Immagini secondarie -->
                                                         {% for img in car.gallery.all %}
                                                             <a href="{{ img.image.url }}" class="hidden">
-                                                                {%cloudinary img.image width=750 height=500 crop="fill"  class="hidden" %} alt="">
+                                                                <img class="hidden" src="{{ img.image.url|add:'?c_fill,w_750,h_500' }}" alt="">
                                                             </a>
                                                         {% endfor %}
                                                     </div>

@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{% load cloudinary %}
+
 {% block content %}
 
 {% load static %}
@@ -53,7 +53,7 @@
                                                     <span>{{ membro.price_per_day }}€</span>
                                                 </div>
                                             {% endif %}
-                                        {% cloudinary membro.image_principal width=750 height=500 crop="fill" alt="car" class="d-block w-100"%}
+                                            <img class="d-block w-100" src="{{ membro.image_principal.url|add:'?c_fill,w_750,h_500'  }}" alt="car">
                                         </a>
                                         <div class="carbox-overlap-wrapper">
                                             <div class="overlap-box">
@@ -61,12 +61,12 @@
                                                     <div class="car-magnify-gallery">
                                                         <a href="{{ membro.image_principal.url }}" class="overlap-btn">
                                                             <i class="fa fa-expand"></i>
-                                                            {% cloudinary membro.image_principal width=750 height=500 crop="fill" class="hidden" %}
+                                                            <img class="hidden" src="{{ membro.image_principal.url|add:'?c_fill,w_750,h_500'  }}">
 
                                                         </a>
                                                         {% for img in membro.gallery.all %}
                                                             <a href="{{ img.image.url }}" class="hidden">
-                                                                <img class="hidden" src="{{ img.image.url }}" alt="">
+                                                                <img class="hidden" src="{{ img.image.url|add:'?c_fill,w_750,h_500' }}" alt="">
                                                             </a>
                                                         {% endfor %}
                                                     </div>
@@ -95,7 +95,7 @@
                                     <div class="widget advanced-search2" style="padding-top: 10px">
                                         <a class="btn btn-primary d-block mx-auto search-button"
                                            style="background: #00aced"
-                                           href="{% url 'create_booking' %}?car={{ membro.id }}">
+                                           href="{% url 'create_booking' %}?car={{ .id }}">
                                             Prenota ora
                                         </a>
                                     </div>

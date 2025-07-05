@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{% load cloudinary %}
+
 {% block content %}
 
     {% load static %}
@@ -165,7 +165,7 @@
                                     {% if car.discount_active %}
                                         <div class="tag-2 bg-success">Sconto</div>
                                     {% endif %}
-                                    {% cloudinary membro.image_principal width=750 height=500 crop="fill" class="d-block w-100" %}
+                                    <img class="d-block w-100" src="{{ car.image_principal.url|add:'?c_fill,w_750,h_500'  }}"
                                          alt="{{ car.model }}">
                                     <div class="facilities-list clearfix">
                                         <ul>
@@ -188,15 +188,15 @@
                                                 <a href="{{ car.image_principal.url }}" class="overlap-btn"
                                                    data-sub-html="<h4>{{ car.model }}</h4>">
                                                     <i class="fa fa-expand"></i>
-                                                   {% cloudinary membro.image_principal width=750 height=500 crop="fill" class="hidden"%}
+                                                    <img class="hidden" src="{{ car.image_principal.url|add:'?c_fill,w_750,h_500'  }}"
                                                          alt="{{ car.model }}">
                                                 </a>
 
                                                 <!-- Immagini secondarie (nascoste ma incluse nel lightbox) -->
-                                                {% for image in car.images.all %}
+                                                {% for image in car.gallery.all %}
                                                     <a href="{{ image.image.url }}" class="hidden"
                                                        data-sub-html="<h4>{{ car.model }}</h4>">
-                                                        <img class="hidden" src="{{ image.image.url }}"
+                                                        <img class="hidden" src="{{ image.image.url|add:'?c_fill,w_750,h_500' }}"
                                                              alt="{{ car.model }}">
                                                     </a>
                                                 {% endfor %}
