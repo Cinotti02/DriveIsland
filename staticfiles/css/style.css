@@ -4892,7 +4892,7 @@ footer {
 
 /** Coming soon start **/
 .coming-soon {
-    background: rgba(0, 0, 0, 0.04) url(../img/2480X1000_pantelleria_destination2.jpg) top left repeat;
+    background: rgba(0, 0, 0, 0.04) url(../img/car-1.jpg) top left repeat;
     background-size: cover;
     top: 0;
     width: 100%;
@@ -6068,7 +6068,7 @@ footer {
 
 /** Sub Banner start **/
 .sub-banner {
-    background: rgba(0, 0, 0, 0.04) url(../img/2480X1000_pantelleria_destination2.jpg) top left repeat;
+
     background-size: cover;
     height: 360px;
     background-position: center center;
@@ -8861,7 +8861,7 @@ table {
         line-height: 22px;
         font-size: 14px;
         max-width: 90%;
-        margin: 0 auto;
+        margin: 0px auto;
         margin-bottom: 5px;
     }
 
@@ -9684,7 +9684,7 @@ table {
 
     .search-options-btn, .search-options-btn:hover {
         left: 30px;
-        bottom: 0;
+        bottom: 0px;
     }
 
     .setting-button {
@@ -9720,18 +9720,16 @@ table {
         -ms-transition: 0.5s;
         transition: 0.5s;
         box-shadow: 0 0 5px rgba(0, 0, 0, .1);
-        top: 0 !important;
+        top: 0px !important;
     }
 }
 input, textarea {
-    font-size: 14px;
-    color: #000000;
+  color: #000000;
 }
 
-input::placeholder, textarea::placeholder, input::-webkit-input-placeholder,
-textarea::-webkit-input-placeholder, input:-ms-input-placeholder, textarea:-ms-input-placeholder {
-    color: #c6c4c4 !important;
+input::-webkit-input-placeholder, textarea::-webkit-input-placeholder{
     font-size: 14px;
+    color: #000000 !important;
 }
 .form-control:disabled, .form-control[readonly]{
     font-size: 14px;
