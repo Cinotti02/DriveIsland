@@ -24,7 +24,7 @@ try:
     call_command('migrate', interactive=False)
     print("== MIGRAZIONI OK ==")
 
-    call_command('loaddata', 'permissions.json')
+
     call_command('loaddata', 'data.json')
     print("== BACKUP IMPORTATO CON SUCCESSO ==")
 
