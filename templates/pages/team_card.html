@@ -1,4 +1,5 @@
 {% load static %}
+{% load cloudinary %}
 
 <!-- Our team start -->
 <div class="our-team content-area bg-grea-3">
@@ -26,8 +27,7 @@
                                 <div class="photo">
                                     <a href="#">
                                         {% if membro.photo.url %}
-                                            <img src="{{ membro.photo.url }}" alt="{{ membro.first_name }}"
-                                                 class="img-fluid ">
+                                           {{% cloudinary membro.photo width=800 height=800 crop="fill" class="img-fluid" loading="lazy" alt=membro.first_name %}
                                         {% else %}
                                             <img src="{% static 'img/avatar/avatar-12.jpg' %}" alt="team-1"
                                                  class="img-fluid">

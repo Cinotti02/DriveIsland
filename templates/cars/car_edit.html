@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 {% load widget_tweaks %}
 {% block content %}
+    {% load cloudinary %}
 
     <div class="featured-car content-area">
         <div class="container mt-5 mb-5">
@@ -35,9 +36,9 @@
                                             <label class="form-label fw-semibold text-dark">Cambia immagine</label>
                                             <div>
                                                 {% if form.instance.image_principal %}
-                                                    <img src="{{ form.instance.image_principal.url }}"
+                                                    {% cloudinary membro.image_principal width=750 height=500 crop="fill"
                                                          style="width: 200px"
-                                                         class="img-fluid mb-2 rounded" alt="Immagine esistente">
+                                                         class="img-fluid mb-2 rounded" alt="Immagine esistente"%}
                                                 {% endif %}
                                             </div>
                                             <div class="form-group">

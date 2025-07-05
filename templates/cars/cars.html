@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-
+{% load cloudinary %}
 {% block content %}
 
 {% load static %}
@@ -53,7 +53,7 @@
                                                     <span>{{ membro.price_per_day }}€</span>
                                                 </div>
                                             {% endif %}
-                                            <img class="d-block w-100" src="{{ membro.image_principal.url }}" alt="car">
+                                        {% cloudinary membro.image_principal width=750 height=500 crop="fill" alt="car" class="d-block w-100"%}
                                         </a>
                                         <div class="carbox-overlap-wrapper">
                                             <div class="overlap-box">
@@ -61,7 +61,7 @@
                                                     <div class="car-magnify-gallery">
                                                         <a href="{{ membro.image_principal.url }}" class="overlap-btn">
                                                             <i class="fa fa-expand"></i>
-                                                            <img class="hidden" src="{{ membro.image_principal.url }}">
+                                                            {% cloudinary membro.image_principal width=750 height=500 crop="fill" class="hidden" %}
 
                                                         </a>
                                                         {% for img in membro.gallery.all %}

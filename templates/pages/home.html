@@ -148,7 +148,7 @@
                                                         <!-- Immagini secondarie -->
                                                         {% for img in car.gallery.all %}
                                                             <a href="{{ img.image.url }}" class="hidden">
-                                                                <img class="hidden" src="{{ img.image.url }}" alt="">
+                                                                {% cloudinary img.image width=750 height=500 crop="fill" class="hidden" alt=""%}>
                                                             </a>
                                                         {% endfor %}
                                                     </div>
@@ -243,7 +243,7 @@
                                                         <!-- Immagini secondarie -->
                                                         {% for img in car.gallery.all %}
                                                             <a href="{{ img.image.url }}" class="hidden">
-                                                                <img class="hidden" src="{{ img.image.url }}" alt="">
+                                                                {%cloudinary img.image width=750 height=500 crop="fill"  class="hidden" %} alt="">
                                                             </a>
                                                         {% endfor %}
                                                     </div>

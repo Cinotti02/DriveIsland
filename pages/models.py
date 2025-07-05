@@ -14,17 +14,3 @@ class Team(models.Model):
      def __str__(self):
           return self.first_name
 
-     def save(self, *args, **kwargs):
-          super().save(*args, **kwargs)
-
-          # Percorso assoluto all'immagine salvata
-          if self.photo:
-               img_path = self.photo.path
-               try:
-                    img = Image.open(img_path)
-                    img = img.convert('RGB')
-                    fixed_size = (800,800)
-                    img = img.resize(fixed_size)
-                    img.save(img_path)
-               except Exception as e:
-                    print(f"Errore nel ridimensionamento dell'immagine: {e}")

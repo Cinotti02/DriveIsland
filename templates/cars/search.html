@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-
+{% load cloudinary %}
 {% block content %}
 
     {% load static %}
@@ -165,7 +165,7 @@
                                     {% if car.discount_active %}
                                         <div class="tag-2 bg-success">Sconto</div>
                                     {% endif %}
-                                    <img class="d-block w-100" src="{{ car.image_principal.url }}"
+                                    {% cloudinary membro.image_principal width=750 height=500 crop="fill" class="d-block w-100" %}
                                          alt="{{ car.model }}">
                                     <div class="facilities-list clearfix">
                                         <ul>
@@ -188,7 +188,7 @@
                                                 <a href="{{ car.image_principal.url }}" class="overlap-btn"
                                                    data-sub-html="<h4>{{ car.model }}</h4>">
                                                     <i class="fa fa-expand"></i>
-                                                    <img class="hidden" src="{{ car.image_principal.url }}"
+                                                   {% cloudinary membro.image_principal width=750 height=500 crop="fill" class="hidden"%}
                                                          alt="{{ car.model }}">
                                                 </a>
 
