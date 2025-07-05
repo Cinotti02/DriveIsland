@@ -2,6 +2,7 @@ from django.contrib.auth.tokens import default_token_generator
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import login, logout, get_user_model, update_session_auth_hash
 from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth.models import Group
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
