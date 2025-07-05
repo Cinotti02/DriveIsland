@@ -30,6 +30,8 @@ DEBUG = os.environ.get("DEBUG", "False") == "True"
 
 ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS", "127.0.0.1,localhost").split(",")
 
+SITE_DOMAIN = os.environ.get("SITE_DOMAIN", "127.0.0.1:8000")
+
 # Application definition
 
 INSTALLED_APPS = [

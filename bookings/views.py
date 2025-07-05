@@ -118,9 +118,9 @@ def payment_success(request, booking_id):
     context = {
         'booking': booking,
         'current_year': timezone.now().year,
-        'dashboard_url': request.build_absolute_uri(reverse('dashboard')),
+        'dashboard_url': f"https://{settings.SITE_DOMAIN}{reverse('dashboard')}",
     }
-    html_content = render_to_string('bookings/payment_confirmation_email.html', context)
+    html_content = render_to_string('bookings/payment/payment_confirmation_email.html', context)
 
     email = EmailMultiAlternatives(
         subject='Conferma prenotazione e pagamento - DriveIsland',
@@ -131,7 +131,7 @@ def payment_success(request, booking_id):
     email.attach_alternative(html_content, "text/html")
     email.send()
 
-    return render(request, "bookings/payment_success.html", {"booking": booking})
+    return render(request, "bookings/payment/payment_success.html", {"booking": booking})
 
 @login_required
 def payment_cancel(request):
