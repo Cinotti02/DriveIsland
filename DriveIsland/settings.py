@@ -60,6 +60,8 @@ MIDDLEWARE = [
     'core.middleware.ClearMessagesOnAdminLoginMiddleware'
 ]
 
+CSRF_TRUSTED_ORIGINS = ['https://driveisland.onrender.com']
+
 ROOT_URLCONF = 'DriveIsland.urls'
 
 TEMPLATES = [
