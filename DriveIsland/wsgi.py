@@ -23,8 +23,11 @@ try:
 
     call_command('migrate', interactive=False)
     print("== MIGRAZIONI OK ==")
-    call_command('loaddata', 'backup.json', verbosity=2)
+
+    call_command('loaddata', 'permissions.json')
+    call_command('loaddata', 'data.json')
     print("== BACKUP IMPORTATO CON SUCCESSO ==")
+
 except Exception as e:
     print("=== ERRORE DURANTE IL DEPLOY / LOADDATA ===")
 
