@@ -19,7 +19,9 @@ django.setup()
 django.setup()
 try:
     call_command('migrate', interactive=False)
+    if os.environ.get('INITIAL_LOAD') == 'True':
+        call_command('loaddata', 'backup.json')
 except Exception as e:
-    print(f"Errore durante le migrazioni: {e}")
+    print(f"Errore durante migrazioni o caricamento dati: {e}")
 
 application = get_wsgi_application()
