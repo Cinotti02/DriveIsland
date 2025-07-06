@@ -2,7 +2,7 @@
 
 {% block content %}
 
-{% load static %}
+    {% load static %}
 
 
     <!-- Sub banner start -->
@@ -53,7 +53,9 @@
                                                     <span>{{ membro.price_per_day }}€</span>
                                                 </div>
                                             {% endif %}
-                                            <img class="d-block w-100" src="{{ membro.image_principal.url|add:'?c_fill,w_750,h_500'  }}" alt="car">
+                                            <img class="d-block w-100"
+                                                 src="{{ membro.image_principal.url|add:'?c_fill,w_750,h_500' }}"
+                                                 alt="car">
                                         </a>
                                         <div class="carbox-overlap-wrapper">
                                             <div class="overlap-box">
@@ -61,12 +63,15 @@
                                                     <div class="car-magnify-gallery">
                                                         <a href="{{ membro.image_principal.url }}" class="overlap-btn">
                                                             <i class="fa fa-expand"></i>
-                                                            <img class="hidden" src="{{ membro.image_principal.url|add:'?c_fill,w_750,h_500'  }}">
+                                                            <img class="hidden"
+                                                                 src="{{ membro.image_principal.url|add:'?c_fill,w_750,h_500' }}">
 
                                                         </a>
                                                         {% for img in membro.gallery.all %}
                                                             <a href="{{ img.image.url }}" class="hidden">
-                                                                <img class="hidden" src="{{ img.image.url|add:'?c_fill,w_750,h_500' }}" alt="">
+                                                                <img class="hidden"
+                                                                     src="{{ img.image.url|add:'?c_fill,w_750,h_500' }}"
+                                                                     alt="">
                                                             </a>
                                                         {% endfor %}
                                                     </div>
@@ -250,6 +255,11 @@
             display: flex;
             flex-direction: column;
             padding: 10px;
+        }
+
+        .pagination > li > a:hover {
+            background: #007bff;
+            color: #fff;
         }
 
         .ui-slider .ui-slider-range {
