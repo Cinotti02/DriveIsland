@@ -1,6 +1,6 @@
 from decimal import Decimal
 from django.db import models
-from PIL import Image
+import cloudinary.uploader
 import os
 from cloudinary.models import CloudinaryField
 from django.db.models.signals import pre_delete, pre_save
@@ -92,14 +92,16 @@ def delete_old_main_image_on_update(sender, instance, **kwargs):
     new_image = instance.image_principal
 
     if old_image and old_image != new_image:
-        if os.path.isfile(old_image.path):
-            try:
-                os.remove(old_image.path)
-            except (FileNotFoundError, ValueError):
-                pass
+        try:
+            cloudinary.uploader.destroy(old_image.public_id)
+        except Exception as e:
+            print(f"Errore eliminazione immagine Cloudinary: {e}")
 
 # Elimina le immagini secondarie quando vengono cancellate (dal formset o dalla cascata)
 @receiver(pre_delete, sender=CarImage)
 def delete_secondary_image_on_delete(sender, instance, **kwargs):
-    if instance.image and os.path.isfile(instance.image.path):
-        os.remove(instance.image.path)
+    if instance.image:
+        try:
+            cloudinary.uploader.destroy(instance.image.public_id)
+        except Exception as e:
+            print(f"Errore eliminazione immagine secondaria Cloudinary: {e}")
