@@ -35,7 +35,7 @@
                                             <label class="form-label fw-semibold text-dark">Cambia immagine</label>
                                             <div>
                                                 {% if form.instance.image_principal %}
-                                                    <img src="{{ form.instance.image_principal.url|add:'?c_fill,w_750,h_500'  }}"
+                                                    <img src="{{ form.instance.image_principal.url|add:'?c_fill,w_750,h_500' }}"
                                                          style="width: 200px"
                                                          class="img-fluid mb-2 rounded" alt="Immagine esistente">
                                                 {% endif %}
@@ -64,30 +64,28 @@
                                     </div>
                                     <hr>
                                     <div class="form-group">
-                                        <label for="secondary_images_input">Immagini secondarie</label>
-                                        <input type="file" id="secondary_images_input" name="secondary_images" multiple
-                                               class="form-control">
+                                        <label class="form-label fw-semibold text-dark">Immagini secondarie</label>
 
-                                        <!-- Preview di tutte le immagini -->
-                                        <div id="preview-container" class="mt-3 d-flex flex-wrap gap-2">
-                                            <!-- Immagini esistenti -->
+                                        {{ formset.management_form }}
+
+                                        <div id="preview-container" class="d-flex flex-wrap gap-3">
                                             {% for form in formset %}
-                                                {{ form.id }} {# Necessario per Django #}
                                                 <div class="preview-image position-relative">
+                                                    {{ form.id }} {# Campo hidden ID immagine #}
+
                                                     {% if form.instance.image %}
                                                         <img src="{{ form.instance.image.url|add:'?c_fill,w_750,h_500' }}"
-                                                             alt="Immagine esistente">
+                                                             class="img-thumbnail" style="height: 100px;">
                                                         <button type="button" class="remove-btn"
-                                                                onclick="removeExistingImage(this)">
-                                                            ×
+                                                                onclick="removeExistingImage(this)">×
                                                         </button>
-                                                        {{ form.DELETE|add_class:"d-none" }}
+                                                        {{ form.DELETE }}
                                                     {% endif %}
+
+                                                    {{ form.image|add_class:"form-control mt-2 image-input" }}
                                                 </div>
                                             {% endfor %}
-
                                         </div>
-                                        {{ formset.management_form }}
                                     </div>
 
 
@@ -127,62 +125,40 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            const input = document.getElementById('secondary_images_input');
             const previewContainer = document.getElementById('preview-container');
-            let selectedFiles = [];
 
-            input.addEventListener('change', (e) => {
-                const files = Array.from(e.target.files);
+            // Per ogni nuovo campo input immagine
+            document.querySelectorAll('.image-input').forEach(input => {
+                input.addEventListener('change', function (e) {
+                    const file = e.target.files[0];
+                    if (file) {
+                        const reader = new FileReader();
+                        reader.onload = function (event) {
+                            const parent = input.closest('.preview-image');
 
-                files.forEach(file => {
-                    selectedFiles.push(file);
-
-                    const reader = new FileReader();
-                    reader.onload = function (event) {
-                        const div = document.createElement('div');
-                        div.className = 'position-relative m-2';
-
-                        const img = document.createElement('img');
-                        img.src = event.target.result;
-                        img.className = 'img-fluid rounded border';
-                        img.style.height = '100px';
-
-                        const btn = document.createElement('button');
-                        btn.type = 'button';
-                        btn.textContent = '×';
-                        btn.className = 'remove-btn';
-                        btn.onclick = () => {
-                            previewContainer.removeChild(div);
-                            selectedFiles = selectedFiles.filter(f => f !== file);
-                            updateFileInput();
+                            // Se esiste già un'immagine, sostituiscila
+                            const existing = parent.querySelector('img');
+                            if (existing) {
+                                existing.src = event.target.result;
+                            } else {
+                                const img = document.createElement('img');
+                                img.src = event.target.result;
+                                img.className = 'img-thumbnail';
+                                img.style.height = '100px';
+                                parent.prepend(img);
+                            }
                         };
-
-                        div.appendChild(img);
-                        div.appendChild(btn);
-                        previewContainer.appendChild(div);
-                    };
-
-                    reader.readAsDataURL(file);
+                        reader.readAsDataURL(file);
+                    }
                 });
-
-                updateFileInput();
             });
-
-            function updateFileInput() {
-                const dataTransfer = new DataTransfer();
-                selectedFiles.forEach(file => dataTransfer.items.add(file));
-                input.files = dataTransfer.files;
-            }
-
         });
 
         function removeExistingImage(btn) {
             const container = btn.closest('.preview-image');
             const checkbox = container.querySelector('input[type="checkbox"]');
-            if (checkbox) {
-                checkbox.checked = true;
-            }
-            container.style.display = 'none';  // Nasconde l'immagine già salvata
+            if (checkbox) checkbox.checked = true;
+            container.style.display = 'none';
         }
     </script>
 
