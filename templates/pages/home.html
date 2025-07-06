@@ -133,7 +133,9 @@
                                                 <br>
                                                 <span style="color: #28a745; font-weight: 1000; font-size: 20px">{{ car.get_discounted_price|floatformat:2 }}€</span>
                                             </div>
-                                            <img class="d-block w-100" src="{{ car.image_principal.url|add:'?c_fill,w_750,h_500'  }}" alt="car">
+                                            <img class="d-block w-100"
+                                                 src="{{ car.image_principal.url|add:'?c_fill,w_750,h_500' }}"
+                                                 alt="car">
                                         </a>
                                         <div class="carbox-overlap-wrapper">
                                             <div class="overlap-box">
@@ -142,13 +144,16 @@
                                                         <!-- Immagine principale -->
                                                         <a href="{{ car.image_principal.url }}" class="overlap-btn">
                                                             <i class="fa fa-expand"></i>
-                                                            <img class="hidden" src="{{ car.image_principal.url|add:'?c_fill,w_750,h_500'  }}"
+                                                            <img class="hidden"
+                                                                 src="{{ car.image_principal.url|add:'?c_fill,w_750,h_500' }}"
                                                                  alt="{{ car.model }}">
                                                         </a>
                                                         <!-- Immagini secondarie -->
                                                         {% for img in car.gallery.all %}
                                                             <a href="{{ img.image.url }}" class="hidden">
-                                                                <img class="hidden" src="{{ img.image.url|add:'?c_fill,w_750,h_500' }}" alt="">
+                                                                <img class="hidden"
+                                                                     src="{{ img.image.url|add:'?c_fill,w_750,h_500' }}"
+                                                                     alt="">
                                                             </a>
                                                         {% endfor %}
                                                     </div>
@@ -228,7 +233,9 @@
                                                     <span>{{ car.price_per_day }}€</span>
                                                 </div>
                                             {% endif %}
-                                            <img class="d-block w-100" src="{{ car.image_principal.url|add:'?c_fill,w_750,h_500'  }}" alt="car">
+                                            <img class="d-block w-100"
+                                                 src="{{ car.image_principal.url|add:'?c_fill,w_750,h_500' }}"
+                                                 alt="car">
                                         </a>
                                         <div class="carbox-overlap-wrapper">
                                             <div class="overlap-box">
@@ -237,13 +244,16 @@
                                                         <!-- Immagine principale -->
                                                         <a href="{{ car.image_principal.url }}" class="overlap-btn">
                                                             <i class="fa fa-expand"></i>
-                                                            <img class="hidden" src="{{ car.image_principal.url|add:'?c_fill,w_750,h_500'  }}"
+                                                            <img class="hidden"
+                                                                 src="{{ car.image_principal.url|add:'?c_fill,w_750,h_500' }}"
                                                                  alt="{{ car.model }}">
                                                         </a>
                                                         <!-- Immagini secondarie -->
                                                         {% for img in car.gallery.all %}
                                                             <a href="{{ img.image.url }}" class="hidden">
-                                                                <img class="hidden" src="{{ img.image.url|add:'?c_fill,w_750,h_500' }}" alt="">
+                                                                <img class="hidden"
+                                                                     src="{{ img.image.url|add:'?c_fill,w_750,h_500' }}"
+                                                                     alt="">
                                                             </a>
                                                         {% endfor %}
                                                     </div>
@@ -252,22 +262,22 @@
                                         </div>
                                     </a>
                                 </div>
-                            <a href="{% url 'car_details' car.id %}">
-                                <div class="detail">
-                                    <h1 class="title">
-                                        {{ car.model }}
-                                    </h1>
-                                    <div class="location" style="margin-bottom: 25px">
-                                        <i class="flaticon-pin"></i> {{ car.location }}
+                                <a href="{% url 'car_details' car.id %}">
+                                    <div class="detail">
+                                        <h1 class="title">
+                                            {{ car.model }}
+                                        </h1>
+                                        <div class="location" style="margin-bottom: 25px">
+                                            <i class="flaticon-pin"></i> {{ car.location }}
+                                        </div>
+                                        <ul class="facilities-list clearfix">
+                                            <li>{{ car.fuel_type }}</li>
+                                            <li>{{ car.gearbox }}</li>
+                                            <li>{{ car.category }}</li>
+                                            <li>{{ car.color }}</li>
+                                        </ul>
                                     </div>
-                                    <ul class="facilities-list clearfix">
-                                        <li>{{ car.fuel_type }}</li>
-                                        <li>{{ car.gearbox }}</li>
-                                        <li>{{ car.category }}</li>
-                                        <li>{{ car.color }}</li>
-                                    </ul>
-                                </div>
-                            </a>
+                                </a>
                                 <div class="widget advanced-search2" style="padding-top: 10px">
                                     <a class="btn btn-danger d-block mx-auto search-button" style="background: #00aced"
                                        href="{% url 'create_booking' %}?car={{ car.id }}">
@@ -350,7 +360,14 @@
             color: white !important;
         }
 
+        @media (max-width: 1024px) {
+            .featured-car {
+                display: none !important;
+            }
+        }
+
 
     </style>
+
 
 {% endblock %}
