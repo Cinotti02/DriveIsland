@@ -219,23 +219,43 @@ def add_car(request):
         formset = formset_class(request.POST, request.FILES, queryset=CarImage.objects.none())
 
         if form.is_valid() and formset.is_valid():
-            car = form.save
+            car = form.save()
 
-            for image_form in formset.cleaned_data:
-                if image_form.get('image'):
-                    # Upload manuale su Cloudinary
-                    image_file = image_form['image']
+            for image_form in formset:
+                if image_form.cleaned_data.get('DELETE') and image_form.instance.pk:
+                    try:
+                        if image_form.instance.image:
+                            cloudinary_destroy(image_form.instance.image.public_id)
+                        image_form.instance.delete()
+                    except Exception as e:
+                        logger.warning(f"Errore eliminazione immagine: {e}")
+                elif image_form.cleaned_data.get('image'):
+                    # Sostituzione di immagine esistente
+                    image_file = image_form.cleaned_data['image']
+                    try:
+                        if image_form.instance.pk:
+                            if image_form.instance.image:
+                                cloudinary_destroy(image_form.instance.image.public_id)
+                            result = cloudinary_upload(
+                                image_file,
+                                folder=f"cars/{car.model}",
+                                transformation={"width": 750, "height": 500, "crop": "fill"}
+                            )
+                            image_form.instance.image = result['public_id']
+                            image_form.instance.save()
+                    except Exception as e:
+                        logger.error(f"Errore aggiornamento immagine: {e}")
+
+            for file in request.FILES.getlist('secondary_images'):
+                try:
                     result = cloudinary_upload(
-                        image_file,
-                        folder=f"cars/{car.model}{car.id}",
+                        file,
+                        folder=f"cars/{car.model}",
                         transformation={"width": 750, "height": 500, "crop": "fill"}
                     )
-                    CarImage.objects.create(
-                        car=car,
-                        image=result['public_id']  # salva solo l’ID pubblico
-                    )
-
-            return redirect('cars')
+                    CarImage.objects.create(car=car, image=result['public_id'])
+                except Exception as e:
+                    logger.error(f"Errore caricamento nuova immagine: {e}")
     else:
         form = CarForm()
         formset = formset_class(queryset=CarImage.objects.none())
