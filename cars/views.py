@@ -256,6 +256,12 @@ def add_car(request):
                     CarImage.objects.create(car=car, image=result['public_id'])
                 except Exception as e:
                     logger.error(f"Errore caricamento nuova immagine: {e}")
+
+
+            messages.success(request, "Auto aggiunta con successo.")
+            return redirect('cars')
+        else:
+            messages.error(request, "Correggi gli errori nel modulo.")
     else:
         form = CarForm()
         formset = formset_class(queryset=CarImage.objects.none())
