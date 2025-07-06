@@ -219,49 +219,67 @@ def add_car(request):
         formset = formset_class(request.POST, request.FILES, queryset=CarImage.objects.none())
 
         if form.is_valid() and formset.is_valid():
-            car = form.save()
+            try:
+                with transaction.atomic():
+                    # NON salviamo subito, vogliamo prima caricare l'immagine principale su Cloudinary
+                    car = form.save(commit=False)
 
-            for image_form in formset:
-                if image_form.cleaned_data.get('DELETE') and image_form.instance.pk:
-                    try:
-                        if image_form.instance.image:
-                            cloudinary_destroy(image_form.instance.image.public_id)
-                        image_form.instance.delete()
-                    except Exception as e:
-                        logger.warning(f"Errore eliminazione immagine: {e}")
-                elif image_form.cleaned_data.get('image'):
-                    # Sostituzione di immagine esistente
-                    image_file = image_form.cleaned_data['image']
-                    try:
-                        if image_form.instance.pk:
-                            if image_form.instance.image:
-                                cloudinary_destroy(image_form.instance.image.public_id)
+                    # Se c'è un'immagine principale
+                    main_image_file = request.FILES.get('main_image')
+                    if main_image_file:
+                        result = cloudinary_upload(
+                            main_image_file,
+                            folder=f"cars/{form.cleaned_data['model']}",
+                            # puoi cambiare 'model' se il campo si chiama diversamente
+                            transformation={"width": 750, "height": 500, "crop": "fill"}
+                        )
+                        car.main_image = result['public_id']
+
+                    car.save()  # ora possiamo salvare
+
+                    # Gestione immagini da formset
+                    for image_form in formset:
+                        if image_form.cleaned_data.get('DELETE') and image_form.instance.pk:
+                            try:
+                                if image_form.instance.image:
+                                    cloudinary_destroy(image_form.instance.image.public_id)
+                                image_form.instance.delete()
+                            except Exception as e:
+                                logger.warning(f"Errore eliminazione immagine: {e}")
+                        elif image_form.cleaned_data.get('image'):
+                            image_file = image_form.cleaned_data['image']
+                            try:
+                                if image_form.instance.pk:
+                                    if image_form.instance.image:
+                                        cloudinary_destroy(image_form.instance.image.public_id)
+                                    result = cloudinary_upload(
+                                        image_file,
+                                        folder=f"cars/{car.model}",
+                                        transformation={"width": 750, "height": 500, "crop": "fill"}
+                                    )
+                                    image_form.instance.image = result['public_id']
+                                    image_form.instance.save()
+                            except Exception as e:
+                                logger.error(f"Errore aggiornamento immagine: {e}")
+
+                    # Immagini secondarie fuori dal formset
+                    for file in request.FILES.getlist('secondary_images'):
+                        try:
                             result = cloudinary_upload(
-                                image_file,
+                                file,
                                 folder=f"cars/{car.model}",
                                 transformation={"width": 750, "height": 500, "crop": "fill"}
                             )
-                            image_form.instance.image = result['public_id']
-                            image_form.instance.save()
-                    except Exception as e:
-                        logger.error(f"Errore aggiornamento immagine: {e}")
+                            CarImage.objects.create(car=car, image=result['public_id'])
+                        except Exception as e:
+                            logger.error(f"Errore caricamento nuova immagine: {e}")
 
-            for file in request.FILES.getlist('secondary_images'):
-                try:
-                    result = cloudinary_upload(
-                        file,
-                        folder=f"cars/{car.model}",
-                        transformation={"width": 750, "height": 500, "crop": "fill"}
-                    )
-                    CarImage.objects.create(car=car, image=result['public_id'])
-                except Exception as e:
-                    logger.error(f"Errore caricamento nuova immagine: {e}")
+                messages.success(request, "Auto aggiunta con successo.")
+                return redirect('cars')
 
-
-            messages.success(request, "Auto aggiunta con successo.")
-            return redirect('cars')
-        else:
-            messages.error(request, "Correggi gli errori nel modulo.")
+            except Exception as e:
+                logger.error(f"Errore durante il salvataggio dell'auto: {e}")
+                messages.error(request, "Errore durante il salvataggio. Riprova.")
     else:
         form = CarForm()
         formset = formset_class(queryset=CarImage.objects.none())
