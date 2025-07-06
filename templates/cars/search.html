@@ -158,7 +158,7 @@
             </div>
             <div class="row">
                 {% for car in cars %}
-                    <div class="col-lg-4 col-md-6">
+                    <div class="col-lg-4 col-md-6" style="padding: 15px">
                         <div class="car-box">
                             <div class="car-thumbnail" style="position: relative; overflow: hidden">
                                 <a href="{% url 'car_details' car.id %}" class="car-img">
@@ -268,14 +268,9 @@
             height: 100%;
             width: 100%;
         }
-        @media(min-width: 576px) {
-            .col-md-6 {
-                padding: 15px !important; /* Spazio tra le colonne */
-            }
-        }
 
         @media(max-width: 575px) {
-            .col-6 {
+            .col-lg-4.col-md-6 {
                 padding: 15px 40px !important; /* Spazio tra le colonne per schermi piccoli */
             }
         }

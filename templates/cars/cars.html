@@ -37,7 +37,7 @@
 
                     <div class="row">
                         {% for membro in page_obj %}
-                            <div class="col-lg-6 col-md-6">
+                            <div class="col-lg-6 col-md-6" style="padding: 15px">
                                 <div class="car-box-3">
                                     <div class="car-thumbnail">
                                         <a href="{% url 'car_details' membro.id %}" class="car-img">
@@ -231,16 +231,11 @@
             display: flex;
             flex-direction: column;
             height: 100%;
-        }
-
-        @media(min-width: 575px) {
-            .col-lg-6 {
-                padding: 15px !important; /* Spazio tra le colonne */
-            }
+            margin-bottom: 0;
         }
 
         @media(max-width: 574px) {
-            .col-lg-6 {
+            .col-lg-6.col-md-6 {
                 padding: 15px 40px !important;
             }
         }
