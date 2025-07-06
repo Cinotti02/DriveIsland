@@ -95,7 +95,7 @@
                                     <div class="widget advanced-search2" style="padding-top: 10px">
                                         <a class="btn btn-primary d-block mx-auto search-button"
                                            style="background: #00aced"
-                                           href="{% url 'create_booking' %}?car={{ .id }}">
+                                           href="{% url 'create_booking' %}?car={{ membro.id }}">
                                             Prenota ora
                                         </a>
                                     </div>
@@ -221,6 +221,37 @@
     <!-- Featured car end -->
 
     <style>
+        .slick-slide-item {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        .car-box-3 {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        .car-thumbnail {
+            height: 200px; /* imposta l'altezza delle immagini come vuoi */
+            overflow: hidden;
+        }
+
+        .car-thumbnail img {
+            object-fit: cover;
+            height: 100%;
+            width: 100%;
+        }
+
+        .detail {
+            min-height: 200px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            padding: 10px;
+        }
+
         .ui-slider .ui-slider-range {
             background: #007bff !important;
         }
