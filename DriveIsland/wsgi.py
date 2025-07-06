@@ -16,11 +16,3 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'DriveIsland.settings')
 
 django.setup()
 application = get_wsgi_application()
-try:
-    call_command('collectstatic', interactive=False, verbosity=0)
-
-except Exception as e:
-    print("=== ERRORE DURANTE IL DEPLOY / LOADDATA ===")
-
-    traceback.print_exc()
-    print(f"Errore specifico: {e}")
