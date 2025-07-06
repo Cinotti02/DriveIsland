@@ -1,7 +1,7 @@
 from decimal import Decimal
 from django.db import models
 import cloudinary.uploader
-import os
+from cloudinary.uploader import upload
 from cloudinary.models import CloudinaryField
 from django.db.models.signals import pre_delete, pre_save
 from django.dispatch import receiver
@@ -58,14 +58,22 @@ class Car(models.Model):
     def __str__(self):
         return self.model
 
-    def save(self, *args, **kwargs):
-        super().save(*args, **kwargs)
-
     def get_discounted_price(self):
         if self.discount_active and self.discount_percentage > 0:
             discount_factor = Decimal('1.0') - (Decimal(self.discount_percentage) / Decimal('100'))
             return self.price_per_day * discount_factor
         return self.price_per_day
+
+    def save(self, *args, **kwargs):
+        # Se è presente un'immagine locale da caricare
+        if self.image_principal and not self.pk:
+            upload_result = upload(
+                self.image_principal,
+                folder=f'cars/{self.model}',
+                transformation={"width": 750, "height": 500, "crop": "fill"}
+            )
+            self.image_principal = upload_result['public_id']  # salva solo l'ID pubblico
+        super().save(*args, **kwargs)
 
 
 class CarImage(models.Model):
@@ -74,6 +82,16 @@ class CarImage(models.Model):
 
     def __str__(self):
         return f"Image for {self.car.model}"
+
+    def save(self, *args, **kwargs):
+        if self.image and not self.pk:
+            upload_result = upload(
+                self.image,
+                folder=f'cars/{self.car.model}',
+                transformation={"width": 750, "height": 500, "crop": "fill"}
+            )
+            self.image = upload_result['public_id']
+        super().save(*args, **kwargs)
 
 
 # Elimina l'immagine principale se viene sostituita da una nuova
