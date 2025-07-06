@@ -27,7 +27,7 @@
                                 <div class="photo">
                                     <a href="#">
                                         {% if membro.photo.url %}
-                                            <img src="{{ membro.photo.url }}" alt="{{ membro.first_name }}"
+                                            <img src="{{ membro.photo.url|add:'?c_fill,w_500,h_500'  }}" alt="{{ membro.first_name }}"
                                                  class="img-fluid ">
                                         {% else %}
                                             <img src="{% static 'img/avatar/avatar-12.jpg' %}" alt="team-1"
