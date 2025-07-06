@@ -165,12 +165,14 @@
                                     {% if car.discount_active %}
                                         <div class="tag-2 bg-success">Sconto</div>
                                     {% endif %}
-                                    <img class="d-block w-100" src="{{ car.image_principal.url|add:'?c_fill,w_750,h_500'  }}"
+                                    <img class="d-block w-100"
+                                         src="{{ car.image_principal.url|add:'?c_fill,w_750,h_500' }}"
                                          alt="{{ car.model }}">
                                     <div class="facilities-list clearfix">
                                         <ul>
                                             <li>
-                                                <span><i class="flaticon-fuel" style="color: #007bff"></i></span>{{ car.fuel_type }}
+                                                <span><i class="flaticon-fuel"
+                                                         style="color: #007bff"></i></span>{{ car.fuel_type }}
                                             </li>
                                             <li>
                                                 <span><i></i></span>{{ car.category }}
@@ -188,7 +190,8 @@
                                                 <a href="{{ car.image_principal.url }}" class="overlap-btn"
                                                    data-sub-html="<h4>{{ car.model }}</h4>">
                                                     <i class="fa fa-expand"></i>
-                                                    <img class="hidden" src="{{ car.image_principal.url|add:'?c_fill,w_750,h_500'  }}"
+                                                    <img class="hidden"
+                                                         src="{{ car.image_principal.url|add:'?c_fill,w_750,h_500' }}"
                                                          alt="{{ car.model }}">
                                                 </a>
 
@@ -196,7 +199,8 @@
                                                 {% for image in car.gallery.all %}
                                                     <a href="{{ image.image.url }}" class="hidden"
                                                        data-sub-html="<h4>{{ car.model }}</h4>">
-                                                        <img class="hidden" src="{{ image.image.url|add:'?c_fill,w_750,h_500' }}"
+                                                        <img class="hidden"
+                                                             src="{{ image.image.url|add:'?c_fill,w_750,h_500' }}"
                                                              alt="{{ car.model }}">
                                                     </a>
                                                 {% endfor %}
@@ -252,6 +256,31 @@
         </div>
     </div>
     <!-- Featured car end -->
+    <style>
+        .car-box-3 {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
 
+        .car-thumbnail {
+            height: 200px; /* imposta l'altezza delle immagini come vuoi */
+            overflow: hidden;
+        }
+
+        .car-thumbnail img {
+            object-fit: cover;
+            height: 100%;
+            width: 100%;
+        }
+
+        .detail {
+            min-height: 200px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            padding: 10px;
+        }
+    </style>
 
 {% endblock content %}
