@@ -144,7 +144,6 @@ def car_edit(request, car_id):
     if request.method == 'POST':
         form = CarForm(request.POST, request.FILES, instance=car)
         formset = image_formset_class(request.POST, request.FILES, queryset=CarImage.objects.filter(car=car))
-        secondary_images = request.FILES.getlist('secondary_images')
 
         if form.is_valid() and formset.is_valid():
             form.save()
@@ -160,9 +159,6 @@ def car_edit(request, car_id):
                     new_img = image_form.save(commit=False)
                     new_img.car = car
                     new_img.save()
-
-            for image_file in secondary_images:
-                CarImage.objects.create(car=car, image=image_file)
 
             messages.success(request, "Auto aggiornata con successo.")
             return redirect('cars')
@@ -183,11 +179,13 @@ def car_edit(request, car_id):
 
 @user_passes_test(is_group_admin)
 def add_car(request):
+    formset_class = modelformset_factory(CarImage, form=CarImageForm, extra=1, can_delete=True)
+
     if request.method == 'POST':
         form = CarForm(request.POST, request.FILES)
-        secondary_images = request.FILES.getlist('secondary_images')
+        formset = formset_class(request.POST, request.FILES, queryset=CarImage.objects.none())
 
-        if form.is_valid():
+        if form.is_valid() and formset.is_valid():
             car = form.save(commit=False)
             car.image_principal = None
             form.save()
@@ -196,8 +194,11 @@ def add_car(request):
                 car.image_principal = request.FILES['image_principal']
                 car.save()
 
-                for image in secondary_images:
-                    CarImage.objects.create(car=car, image=image)
+                for image_form in formset:
+                    if image_form.cleaned_data.get('image'):
+                        image = image_form.save(commit=False)
+                        image.car = car
+                        image.save()
 
                 logger.info(f"Nuova auto aggiunta: {car.model} da parte di {request.user}")
                 return redirect('cars')
@@ -208,7 +209,13 @@ def add_car(request):
             print("Errore nel primo form:", form.errors)
     else:
         form = CarForm()
-    return render(request, 'cars/add_car.html', {'form': form})
+        formset = formset_class(queryset=CarImage.objects.none())
+    return render(request, 'cars/add_car.html', {
+        'form': form,
+        'formset': formset,
+        'title': "Aggiungi Auto",
+    })
+
 
 @login_required
 @user_passes_test(is_group_admin)
