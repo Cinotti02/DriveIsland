@@ -13,6 +13,7 @@ from bookings.models import Booking
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.db.models import F, ExpressionWrapper, DecimalField, Case, When, Value
+from cloudinary.uploader import upload as cloudinary_upload, destroy as cloudinary_destroy
 
 import logging
 logger = logging.getLogger(__name__)
@@ -138,7 +139,6 @@ def is_group_admin(user):
 @user_passes_test(is_group_admin)
 def car_edit(request, car_id):
     car = get_object_or_404(Car, pk=car_id)
-
     image_formset_class = modelformset_factory(CarImage, form=CarImageForm, extra=1, can_delete=True)
 
     if request.method == 'POST':
@@ -149,16 +149,49 @@ def car_edit(request, car_id):
             form.save()
             logger.info(f"Auto ID {car.id} ({car.model}) modificata da {request.user}")
 
-
-
-            # salva immagini secondarie
             for image_form in formset:
+                # Cancellazione immagine
                 if image_form.cleaned_data.get('DELETE') and image_form.instance.pk:
-                    image_form.instance.delete()
-                elif image_form.cleaned_data.get('image'):
-                    new_img = image_form.save(commit=False)
-                    new_img.car = car
-                    new_img.save()
+                    try:
+                        if image_form.instance.image:
+                            cloudinary_destroy(image_form.instance.image.public_id)
+                        image_form.instance.delete()
+                    except Exception as e:
+                        logger.warning(f"Errore durante eliminazione immagine: {e}")
+
+                # Sostituzione immagine esistente
+                elif image_form.instance.pk and image_form.cleaned_data.get('image'):
+                    try:
+                        # Rimuovi vecchia immagine
+                        if image_form.instance.image:
+                            cloudinary_destroy(image_form.instance.image.public_id)
+                        # Carica nuova immagine su Cloudinary
+                        image_file = image_form.cleaned_data['image']
+                        result = cloudinary_upload(
+                            image_file,
+                            folder=f"cars/{car.model}",
+                            transformation={"width": 750, "height": 500, "crop": "fill"}
+                        )
+                        image_form.instance.image = result['public_id']
+                        image_form.instance.save()
+                    except Exception as e:
+                        logger.warning(f"Errore aggiornamento immagine: {e}")
+
+                # Aggiunta nuova immagine (senza instance.pk)
+                elif not image_form.instance.pk and image_form.cleaned_data.get('image'):
+                    try:
+                        image_file = image_form.cleaned_data['image']
+                        result = cloudinary_upload(
+                            image_file,
+                            folder=f"cars/{car.model}",
+                            transformation={"width": 750, "height": 500, "crop": "fill"}
+                        )
+                        CarImage.objects.create(
+                            car=car,
+                            image=result['public_id']
+                        )
+                    except Exception as e:
+                        logger.warning(f"Errore upload nuova immagine: {e}")
 
             messages.success(request, "Auto aggiornata con successo.")
             return redirect('cars')
@@ -186,27 +219,23 @@ def add_car(request):
         formset = formset_class(request.POST, request.FILES, queryset=CarImage.objects.none())
 
         if form.is_valid() and formset.is_valid():
-            car = form.save(commit=False)
-            car.image_principal = None
-            form.save()
+            car = form.save
 
-            if 'image_principal' in request.FILES:
-                car.image_principal = request.FILES['image_principal']
-                car.save()
+            for image_form in formset.cleaned_data:
+                if image_form.get('image'):
+                    # Upload manuale su Cloudinary
+                    image_file = image_form['image']
+                    result = cloudinary_upload(
+                        image_file,
+                        folder=f"cars/{car.model}{car.id}",
+                        transformation={"width": 750, "height": 500, "crop": "fill"}
+                    )
+                    CarImage.objects.create(
+                        car=car,
+                        image=result['public_id']  # salva solo l’ID pubblico
+                    )
 
-                for image_form in formset:
-                    if image_form.cleaned_data.get('image'):
-                        image = image_form.save(commit=False)
-                        image.car = car
-                        image.save()
-
-                logger.info(f"Nuova auto aggiunta: {car.model} da parte di {request.user}")
-                return redirect('cars')
-
-            else:
-                print("Errore nel salvataggio dell'immagine:", form.errors)
-        else:
-            print("Errore nel primo form:", form.errors)
+            return redirect('cars')
     else:
         form = CarForm()
         formset = formset_class(queryset=CarImage.objects.none())
