@@ -239,41 +239,8 @@ def add_car(request):
                     car.save()  # ora possiamo salvare
 
                     # Gestione immagini da formset
-                    for image_form in formset:
-                        if image_form.cleaned_data.get('DELETE') and image_form.instance.pk:
-                            try:
-                                if image_form.instance.image:
-                                    cloudinary_destroy(image_form.instance.image.public_id)
-                                image_form.instance.delete()
-                            except Exception as e:
-                                logger.warning(f"Errore eliminazione immagine: {e}")
-                        elif image_form.cleaned_data.get('image'):
-                            image_file = image_form.cleaned_data['image']
-                            try:
-                                if image_form.instance.pk:
-                                    if image_form.instance.image:
-                                        cloudinary_destroy(image_form.instance.image.public_id)
-                                    result = cloudinary_upload(
-                                        image_file,
-                                        folder=f"cars/{car.model}",
-                                        transformation={"width": 750, "height": 500, "crop": "fill"}
-                                    )
-                                    image_form.instance.image = result['public_id']
-                                    image_form.instance.save()
-                            except Exception as e:
-                                logger.error(f"Errore aggiornamento immagine: {e}")
 
-                    # Immagini secondarie fuori dal formset
-                    for file in request.FILES.getlist('secondary_images'):
-                        try:
-                            result = cloudinary_upload(
-                                file,
-                                folder=f"cars/{car.model}",
-                                transformation={"width": 750, "height": 500, "crop": "fill"}
-                            )
-                            CarImage.objects.create(car=car, image=result['public_id'])
-                        except Exception as e:
-                            logger.error(f"Errore caricamento nuova immagine: {e}")
+
 
                 messages.success(request, "Auto aggiunta con successo.")
                 return redirect('cars')
