@@ -11,15 +11,20 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 import os
 from pathlib import Path
-from decouple import config
+from decouple import config, AutoConfig
 import dj_database_url
 from django.contrib import staticfiles
+import dj_database_url
+from dotenv import load_dotenv
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
+ENV_FILE = os.path.join(os.path.dirname(os.path.dirname(__file__)), '.env.local' if os.environ.get('DJANGO_ENV') == 'development' else '.env')
+config = AutoConfig(search_path=os.path.dirname(ENV_FILE))
+
+load_dotenv(ENV_FILE)
+
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY")
