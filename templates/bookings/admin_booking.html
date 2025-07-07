@@ -88,7 +88,11 @@
                             <i class="fa fa-car text-secondary me-1"></i>
                             {{ booking.car.model }}
                         </td>
-                        <td style="border: 1px solid #dee2e6">{{ booking.user.get_full_name|default:booking.user.username }}</td>
+                        <td style="border: 1px solid #dee2e6">{% if booking.user %}
+                            {{ booking.user.get_full_name|default:booking.user.username }}
+                        {% else %}
+                            <span class="text-muted">Utente non disponibile</span>
+                        {% endif %}</td>
                         <td style="border: 1px solid #dee2e6">
                             <span class="badge bg-info text-dark">{{ booking.start_date }}</span>
                         </td>
@@ -110,12 +114,12 @@
                         <td style="border: 1px solid #dee2e6">{{ booking.created_at|date:"d/m/Y H:i" }}</td>
                         <td style="border: 1px solid #dee2e6">
                             {% if booking.notes %}
-                            <button class="btn  btn-primary"
-                                    type="button"
-                                    data-toggle="collapse"
-                                    data-target="#msg-{{ booking.notes }}">
-                                Leggi
-                            </button>
+                                <button class="btn  btn-primary"
+                                        type="button"
+                                        data-toggle="collapse"
+                                        data-target="#msg-{{ booking.notes }}">
+                                    Leggi
+                                </button>
                             {% endif %}
                         </td>
                         <td style="border: 1px solid #dee2e6">
@@ -128,24 +132,24 @@
 
                     </tr>
                     <tr id="msg-{{ booking.notes }}" class="collapse">
-                            <td colspan="9">
-                                {% if msg.reply %}
-                                    <strong>Risposta:</strong>
-                                    <br><br>
-                                    <div class="bg-light p-3 rounded border">
-                                        {{ msg.reply|linebreaksbr }}
-                                        <p class="text-muted small mt-2 mb-0">Risposto
-                                            il {{ msg.replied_at|date:"d/m/Y H:i" }}</p>
-                                    </div>
-                                    <hr>
-                                {% endif %}
-
-                                <strong>Messaggio ricevuto:</strong><br><br>
+                        <td colspan="9">
+                            {% if msg.reply %}
+                                <strong>Risposta:</strong>
+                                <br><br>
                                 <div class="bg-light p-3 rounded border">
-                                    {{ booking.notes|linebreaksbr }}
+                                    {{ msg.reply|linebreaksbr }}
+                                    <p class="text-muted small mt-2 mb-0">Risposto
+                                        il {{ msg.replied_at|date:"d/m/Y H:i" }}</p>
                                 </div>
-                            </td>
-                        </tr>
+                                <hr>
+                            {% endif %}
+
+                            <strong>Messaggio ricevuto:</strong><br><br>
+                            <div class="bg-light p-3 rounded border">
+                                {{ booking.notes|linebreaksbr }}
+                            </div>
+                        </td>
+                    </tr>
                 {% empty %}
                     <tr>
                         <td colspan="6" class="text-center text-muted">Nessuna prenotazione trovata.</td>
