@@ -23,8 +23,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 ENV_FILE = os.path.join(os.path.dirname(os.path.dirname(__file__)), '.env.local' if os.environ.get('DJANGO_ENV') == 'development' else '.env')
 config = AutoConfig(search_path=os.path.dirname(ENV_FILE))
 
-load_dotenv(ENV_FILE)
 
+# Carica prima .env (produzione o valori generici)
+load_dotenv(BASE_DIR / '.env')
+
+# Poi carica .env.local se esiste (sviluppo), sovrascrivendo i valori precedenti
+load_dotenv(BASE_DIR / '.env.local', override=True)
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY")
