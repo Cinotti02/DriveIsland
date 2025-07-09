@@ -262,7 +262,6 @@ def add_car(request):
 
     return render(request, 'cars/add_car.html', {
         'form': form,
-        'formset': formset,
         'title': "Aggiungi Auto",
     })
 
