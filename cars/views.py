@@ -219,7 +219,6 @@ def car_edit(request, car_id):
 @user_passes_test(is_group_admin)
 def add_car(request):
 
-
     if request.method == 'POST':
         form = CarForm(request.POST, request.FILES)
 
@@ -227,13 +226,13 @@ def add_car(request):
         if form.is_valid():
             try:
                 with transaction.atomic():
-                    # NON salviamo subito, vogliamo prima caricare l'immagine principale su Cloudinary
+
                     car = form.save(commit=False)
-                    car.save()  # ora possiamo salvare
+                    car.save()
 
+                    files = request.FILES.getlist('secondary_images')
+                    logger.warning(f"Immagini secondarie ricevute: {[file.name for file in files]}")
 
-
-                    # Immagini secondarie fuori dal formset
                     for file in request.FILES.getlist('secondary_images'):
                         try:
                             result = cloudinary_upload(
@@ -255,7 +254,6 @@ def add_car(request):
             # Mostra gli errori del form
             logger.warning("Form errors:\n%s", pprint.pformat(form.errors))
             logger.warning("Form non-field errors:\n%s", form.non_field_errors())
-            logger.warning("Formset errors:\n%s", pprint.pformat(formset.errors))
             messages.error(request, "Compila correttamente tutti i campi richiesti.")
     else:
         form = CarForm()

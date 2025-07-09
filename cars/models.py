@@ -83,15 +83,6 @@ class CarImage(models.Model):
     def __str__(self):
         return f"Image for {self.car.model}"
 
-    def save(self, *args, **kwargs):
-        if self.image and not self.pk:
-            upload_result = upload(
-                self.image,
-                folder=f'cars/{self.car.model}',
-                transformation={"width": 750, "height": 500, "crop": "fill"}
-            )
-            self.image = upload_result['public_id']
-        super().save(*args, **kwargs)
 
 
 # Elimina l'immagine principale se viene sostituita da una nuova
