@@ -5137,3 +5137,47 @@ django.core.exceptions.DisallowedHost: Invalid HTTP_HOST header: '127.0.0.1:8000
 2025-07-07 13:29:23,524 [INFO] django.utils.autoreload: Watching for file changes with StatReloader
 2025-07-07 13:29:30,328 [INFO] pages.views: Homepage visitata da utente anonimo
 2025-07-07 13:29:57,769 [INFO] pages.views: Homepage visitata da utente anonimo
+2025-07-07 13:35:02,922 [INFO] pages.views: Homepage visitata da utente anonimo
+2025-07-07 13:36:42,736 [INFO] pages.views: Homepage visitata da utente anonimo
+2025-07-07 13:37:07,343 [INFO] pages.views: Homepage visitata da admin
+2025-07-07 13:37:22,828 [WARNING] django.request: Not Found: /img/car-14.jpg
+2025-07-07 13:37:22,828 [WARNING] django.request: Not Found: /img/car-13.jpg
+2025-07-07 13:37:33,540 [WARNING] django.request: Not Found: /.well-known/appspecific/com.chrome.devtools.json
+2025-07-07 13:42:37,934 [INFO] cars.views: Auto ID 14 (Mercedes classe G) modificata da admin
+2025-07-09 16:28:09,065 [INFO] django.utils.autoreload: Watching for file changes with StatReloader
+2025-07-09 16:28:43,421 [INFO] django.utils.autoreload: Watching for file changes with StatReloader
+2025-07-09 16:28:54,072 [INFO] django.utils.autoreload: Watching for file changes with StatReloader
+2025-07-09 16:29:19,255 [INFO] django.utils.autoreload: Watching for file changes with StatReloader
+2025-07-09 16:31:05,859 [INFO] django.utils.autoreload: Watching for file changes with StatReloader
+2025-07-09 16:31:13,502 [INFO] pages.views: Homepage visitata da admin
+2025-07-09 16:31:29,148 [INFO] pages.views: Homepage visitata da admin
+2025-07-09 16:31:36,309 [INFO] pages.views: Homepage visitata da admin
+2025-07-09 16:32:04,698 [INFO] django.utils.autoreload: Watching for file changes with StatReloader
+2025-07-09 16:32:11,919 [INFO] pages.views: Homepage visitata da admin
+2025-07-09 16:34:08,485 [INFO] pages.views: Homepage visitata da admin
+2025-07-09 16:34:14,314 [INFO] pages.views: Homepage visitata da admin
+2025-07-09 16:37:55,215 [WARNING] django.request: Not Found: /favicon.ico
+2025-07-09 16:38:09,119 [INFO] pages.views: Homepage visitata da admin
+2025-07-09 16:41:26,242 [INFO] pages.views: Homepage visitata da admin
+2025-07-09 16:42:51,542 [INFO] pages.views: Homepage visitata da admin
+2025-07-09 16:44:13,113 [INFO] django.utils.autoreload: C:\Users\francesco\Desktop\DriveIsland\DriveIsland\settings.py changed, reloading.
+2025-07-09 16:44:14,862 [INFO] django.utils.autoreload: Watching for file changes with StatReloader
+2025-07-09 16:44:35,577 [INFO] django.utils.autoreload: Watching for file changes with StatReloader
+2025-07-09 16:44:43,680 [INFO] django.utils.autoreload: C:\Users\francesco\Desktop\DriveIsland\DriveIsland\settings.py changed, reloading.
+2025-07-09 16:44:45,170 [INFO] django.utils.autoreload: Watching for file changes with StatReloader
+2025-07-09 16:44:50,536 [INFO] pages.views: Homepage visitata da admin
+2025-07-09 16:45:14,233 [INFO] django.utils.autoreload: C:\Users\francesco\Desktop\DriveIsland\DriveIsland\settings.py changed, reloading.
+2025-07-09 16:45:15,743 [INFO] django.utils.autoreload: Watching for file changes with StatReloader
+2025-07-09 16:45:30,181 [INFO] django.utils.autoreload: Watching for file changes with StatReloader
+2025-07-09 16:45:49,739 [INFO] django.utils.autoreload: C:\Users\francesco\Desktop\DriveIsland\DriveIsland\settings.py changed, reloading.
+2025-07-09 16:45:51,293 [INFO] django.utils.autoreload: Watching for file changes with StatReloader
+2025-07-09 16:45:55,509 [INFO] django.utils.autoreload: Watching for file changes with StatReloader
+2025-07-09 16:46:03,014 [INFO] pages.views: Homepage visitata da admin
+2025-07-09 16:46:57,157 [INFO] django.utils.autoreload: C:\Users\francesco\Desktop\DriveIsland\DriveIsland\settings.py changed, reloading.
+2025-07-09 16:46:58,750 [INFO] django.utils.autoreload: Watching for file changes with StatReloader
+2025-07-09 16:49:57,442 [INFO] django.utils.autoreload: Watching for file changes with StatReloader
+2025-07-09 16:50:45,157 [INFO] django.utils.autoreload: C:\Users\francesco\Desktop\DriveIsland\DriveIsland\settings.py changed, reloading.
+2025-07-09 16:50:46,675 [INFO] django.utils.autoreload: Watching for file changes with StatReloader
+2025-07-09 16:50:50,481 [INFO] django.utils.autoreload: Watching for file changes with StatReloader
+2025-07-09 16:51:07,154 [INFO] pages.views: Homepage visitata da admin
+2025-07-09 16:53:09,417 [INFO] pages.views: Homepage visitata da admin
