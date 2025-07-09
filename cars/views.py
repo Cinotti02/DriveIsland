@@ -20,7 +20,7 @@ import logging
 logger = logging.getLogger(__name__)
 
 def cars_list(request):
-    car = Car.objects.all()
+    car = Car.objects.all().order_by('id')
     categories = Category.objects.all()
     paginator = Paginator(car, 6)
 
@@ -40,7 +40,7 @@ def cars_list(request):
     })
 
 def car_search(request):
-    car = Car.objects.all()
+    car = Car.objects.all().order_by('id')
 
     if request.GET.get('category'):
         car = car.filter(category__name__icontains=request.GET['category'])
