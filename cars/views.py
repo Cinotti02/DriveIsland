@@ -1,3 +1,5 @@
+import pprint
+
 from django.db import transaction
 from django.shortcuts import render, redirect
 from django.template.loader import render_to_string
@@ -17,7 +19,9 @@ from django.db.models import F, ExpressionWrapper, DecimalField, Case, When, Val
 from cloudinary.uploader import upload as cloudinary_upload, destroy as cloudinary_destroy
 
 import logging
+
 logger = logging.getLogger(__name__)
+
 
 def cars_list(request):
     car = Car.objects.all().order_by('id')
@@ -38,6 +42,7 @@ def cars_list(request):
         'gearboxes': dict(Car.GEARBOX_CHOICES),
         'is_admin': is_admin,
     })
+
 
 def car_search(request):
     car = Car.objects.all().order_by('id')
@@ -74,7 +79,6 @@ def car_search(request):
     if request.GET.get('max_price'):
         car = car.filter(effective_price__lte=request.GET['max_price'])
 
-
     # Filtro per date
     start_date = request.GET.get('start_date')
     end_date = request.GET.get('end_date')
@@ -108,18 +112,18 @@ def car_search(request):
             messages.warning(request, "Formato data non valido.")
             car = Car.objects.none()
 
-
     context = {
-            'cars': car,
-            'categories': Category.objects.all(),
-            'models': Car.objects.values_list('model', flat=True).distinct(),
-            'colors': Car.objects.values_list('color', flat=True).distinct(),
-            'fuel_types': dict(Car.FUEL_CHOICES),
-            'gearboxes': dict(Car.GEARBOX_CHOICES),
-            'locations': dict(Car.LOCATION_CHOICES),
-        }
+        'cars': car,
+        'categories': Category.objects.all(),
+        'models': Car.objects.values_list('model', flat=True).distinct(),
+        'colors': Car.objects.values_list('color', flat=True).distinct(),
+        'fuel_types': dict(Car.FUEL_CHOICES),
+        'gearboxes': dict(Car.GEARBOX_CHOICES),
+        'locations': dict(Car.LOCATION_CHOICES),
+    }
 
     return render(request, 'cars/search.html', context)
+
 
 def car_details(request, car_id):
     car = get_object_or_404(Car, id=car_id)
@@ -132,6 +136,7 @@ def car_details(request, car_id):
         'gearboxes': dict(Car.GEARBOX_CHOICES),
         'is_admin': is_admin,
     })
+
 
 def is_group_admin(user):
     return user.groups.filter(name="Amministratore").exists()
@@ -213,55 +218,20 @@ def car_edit(request, car_id):
 
 @user_passes_test(is_group_admin)
 def add_car(request):
-    formset_class = modelformset_factory(CarImage, form=CarImageForm, extra=1, can_delete=True)
+
 
     if request.method == 'POST':
         form = CarForm(request.POST, request.FILES)
-        formset = formset_class(request.POST, request.FILES, queryset=CarImage.objects.none())
 
-        if form.is_valid() and formset.is_valid():
+
+        if form.is_valid():
             try:
                 with transaction.atomic():
                     # NON salviamo subito, vogliamo prima caricare l'immagine principale su Cloudinary
                     car = form.save(commit=False)
-
-                    # Se c'è un'immagine principale
-                    main_image_file = request.FILES.get('main_image')
-                    if main_image_file:
-                        result = cloudinary_upload(
-                            main_image_file,
-                            folder=f"cars/{form.cleaned_data['model']}",
-                            # puoi cambiare 'model' se il campo si chiama diversamente
-                            transformation={"width": 750, "height": 500, "crop": "fill"}
-                        )
-                        car.main_image = result['public_id']
-
                     car.save()  # ora possiamo salvare
 
-                    # Gestione immagini da formset
-                    for image_form in formset:
-                        if image_form.cleaned_data.get('DELETE') and image_form.instance.pk:
-                            try:
-                                if image_form.instance.image:
-                                    cloudinary_destroy(image_form.instance.image.public_id)
-                                image_form.instance.delete()
-                            except Exception as e:
-                                logger.warning(f"Errore eliminazione immagine: {e}")
-                        elif image_form.cleaned_data.get('image'):
-                            image_file = image_form.cleaned_data['image']
-                            try:
-                                if image_form.instance.pk:
-                                    if image_form.instance.image:
-                                        cloudinary_destroy(image_form.instance.image.public_id)
-                                    result = cloudinary_upload(
-                                        image_file,
-                                        folder=f"cars/{car.model}",
-                                        transformation={"width": 750, "height": 500, "crop": "fill"}
-                                    )
-                                    image_form.instance.image = result['public_id']
-                                    image_form.instance.save()
-                            except Exception as e:
-                                logger.error(f"Errore aggiornamento immagine: {e}")
+
 
                     # Immagini secondarie fuori dal formset
                     for file in request.FILES.getlist('secondary_images'):
@@ -281,9 +251,15 @@ def add_car(request):
             except Exception as e:
                 logger.error(f"Errore durante il salvataggio dell'auto: {e}")
                 messages.error(request, "Errore durante il salvataggio. Riprova.")
+        else:
+            # Mostra gli errori del form
+            logger.warning("Form errors:\n%s", pprint.pformat(form.errors))
+            logger.warning("Form non-field errors:\n%s", form.non_field_errors())
+            logger.warning("Formset errors:\n%s", pprint.pformat(formset.errors))
+            messages.error(request, "Compila correttamente tutti i campi richiesti.")
     else:
         form = CarForm()
-        formset = formset_class(queryset=CarImage.objects.none())
+
     return render(request, 'cars/add_car.html', {
         'form': form,
         'formset': formset,
@@ -314,6 +290,7 @@ def delete_car(request, car_id):
     messages.success(request, "Auto eliminata con successo.")
     return redirect('cars')
 
+
 def send_booking_cancellation_email(user, booking, car):
     html_content = render_to_string('cars/booking_cancelled_email.html', {
         'user': user,
@@ -332,4 +309,3 @@ def send_booking_cancellation_email(user, booking, car):
     )
     msg.attach_alternative(html_content, "text/html")
     msg.send()
-

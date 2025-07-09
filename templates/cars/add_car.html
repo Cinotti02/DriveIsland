@@ -13,7 +13,24 @@
                             </h4>
                         </div>
                         <div class="card-body px-4 py-5">
-                            <form method="post" enctype="multipart/form-data" novalidate>
+                            <form method="post" enctype="multipart/form-data">
+
+                                {% if form.non_field_errors %}
+                                    <div class="alert alert-danger">
+                                        {% for error in form.non_field_errors %}
+                                            <div>{{ error }}</div>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+
+                                {% if formset.non_form_errors %}
+                                    <div class="alert alert-danger">
+                                        {% for error in formset.non_form_errors %}
+                                            <div>{{ error }}</div>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+
                                 {% csrf_token %}
                                 <div class="row g-3">
                                     {% for field in form %}
@@ -36,15 +53,17 @@
                                             </label>
                                             {{ field|add_class:"form-control" }}{% endif %}
                                         {% if field.errors %}
-                                            <div class="text-danger small mt-1">
-                                                {{ field.errors.0 }}
+                                            <div class="invalid-feedback d-block">
+                                                {% for error in field.errors %}
+                                                    <div>{{ error }}</div>
+                                                {% endfor %}
                                             </div>
                                         {% endif %}
                                     </div>
-
                                     </div>
                                     {% endfor %}
                                     </div>
+
 
                                     <div class="form-group">
                                         <label for="secondary_images">Immagini secondarie</label>
