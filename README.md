@@ -1,8 +1,10 @@
 # DriveIsland – Piattaforma di Noleggio Auto Online
 
-**DriveIsland** è un'applicazione web per la gestione e il noleggio online di automobili. Sviluppata con Django e deployata su Render, offre un'esperienza completa sia per clienti che per amministratori, con funzionalità di prenotazione, pagamento, gestione flotte e assistenza integrata.
+**DriveIsland** è un'applicazione web per la gestione e il noleggio online di automobili. Sviluppata con Django e
+deployata su Render, offre un'esperienza completa sia per clienti che per amministratori, con funzionalità di
+prenotazione, pagamento, gestione flotte e assistenza integrata.
 
-🔗 **Live demo**: [https://driveisland.onrender.com/](https://driveisland.onrender.com/)
+🔗 **Link**: [https://driveisland.onrender.com/](https://driveisland.onrender.com/)
 
 ---
 
@@ -13,35 +15,39 @@
 Gli utenti registrati appartenenti al gruppo "clienti" possono accedere alle seguenti funzionalità:
 
 - **Registrazione con conferma email**:
-  - Al momento della registrazione, viene inviata automaticamente un'email con un link di attivazione per convalidare l’account.
+    - Al momento della registrazione, viene inviata automaticamente un'email con un link di attivazione per convalidare
+      l’account.
 
 - **Prenotazione auto con pagamento online**:
-  - Possibilità di prenotare un’auto disponibile specificando data, ora e luogo di ritiro/riconsegna.
-  - Il pagamento avviene in modo sicuro tramite Stripe (in modalità test con carta).
+    - Possibilità di prenotare un’auto disponibile specificando data, ora e luogo di ritiro/riconsegna.
+    - Il pagamento avviene in modo sicuro tramite Stripe (in modalità test con carta).
 
 - **Recupero password dimenticata**:
-  - Se l’utente dimentica la password, può utilizzare il link "Password dimenticata?" nel form di login.
-  - Verrà inviata un’email contenente un link sicuro per reimpostare la password.
+    - Se l’utente dimentica la password, può utilizzare il link "Password dimenticata?" nel form di login.
+    - Verrà inviata un’email contenente un link sicuro per reimpostare la password.
 
 - **Annullamento delle prenotazioni**:
-  - I clienti possono annullare autonomamente una prenotazione tramite la dashboard.
-  - L’annullamento comporta la disattivazione della prenotazione e un'email di conferma viene inviata automaticamente.
+    - I clienti possono annullare autonomamente una prenotazione tramite la dashboard.
+    - L’annullamento comporta la disattivazione della prenotazione e un'email di conferma viene inviata automaticamente.
 
 - **Gestione del profilo**:
-  - Accesso a un'area personale per modificare i propri dati (nome, email, telefono, data di nascita).
-  - Possibilità di eliminare definitivamente il proprio account.
+    - Accesso a un'area personale per modificare i propri dati (nome, email, telefono, data di nascita).
+    - Possibilità di eliminare definitivamente il proprio account.
 
 - **Visualizzazione prenotazioni personali**:
-  - Le prenotazioni attive, future o passate sono visibili in una dashboard personale, con dettagli completi e stato aggiornato.
+    - Le prenotazioni attive, future o passate sono visibili in una dashboard personale, con dettagli completi e stato
+      aggiornato.
 
 - **Ricerca avanzata delle auto**:
-  - Funzionalità di ricerca e filtro per categoria, disponibilità, caratteristiche (carburante, cambio, aria condizionata, ecc.).
+    - Funzionalità di ricerca e filtro per categoria, disponibilità, caratteristiche (carburante, cambio, aria
+      condizionata, ecc.).
 
 - **Richiesta di assistenza**:
-  - Modulo "Contattaci" per inviare richieste di supporto.
-  - Le risposte vengono inviate via email direttamente dall’amministratore.
+    - Modulo "Contattaci" per inviare richieste di supporto.
+    - Le risposte vengono inviate via email direttamente dall’amministratore.
 
 💳 Test pagamento (Stripe):
+
 ```
 Carta: 4242 4242 4242 4242
 Scadenza: qualsiasi data futura
@@ -52,52 +58,55 @@ CVV: qualsiasi
 
 ### 🛠️ Amministratori
 
-Gli amministratori hanno **tutti i permessi dei clienti**, con funzionalità avanzate per la gestione completa della piattaforma:
+Gli amministratori hanno **tutti i permessi dei clienti**, con funzionalità avanzate per la gestione completa della
+piattaforma:
 
 - **Gestione prenotazioni**:
-  - Visualizzazione dell’elenco completo di tutte le prenotazioni
-  - Filtraggio per cliente, data e stato (completate, in corso, future)
-  - Cancellazione delle prenotazioni con:
-    - Form dedicato per inserire una motivazione
-    - Notifica automatica via email al cliente
+    - Visualizzazione dell’elenco completo di tutte le prenotazioni
+    - Filtraggio per cliente, data e stato (completate, in corso, future)
+    - Cancellazione delle prenotazioni con:
+        - Form dedicato per inserire una motivazione
+        - Notifica automatica via email al cliente
 
 - **Gestione richieste di assistenza**:
-  - Accesso a tutte le richieste inviate tramite il modulo "Contattaci"
-  - Filtraggio per stato (risposte/non risposte) e data
-  - Risposta diretta tramite form, con invio automatico via email
+    - Accesso a tutte le richieste inviate tramite il modulo "Contattaci"
+    - Filtraggio per stato (risposte/non risposte) e data
+    - Risposta diretta tramite form, con invio automatico via email
 
 - **Gestione auto (CRUD completo)**:
-  - Aggiunta di nuove auto tramite form
-  - Modifica delle informazioni esistenti (modello, prezzo, disponibilità, ecc.)
-  - Eliminazione di auto dal sistema
-  - Visualizzazione dettagliata di ogni auto
+    - Aggiunta di nuove auto tramite form
+    - Modifica delle informazioni esistenti (modello, prezzo, disponibilità, ecc.)
+    - Eliminazione di auto dal sistema
+    - Visualizzazione dettagliata di ogni auto
 
 - **Gestione attributi delle auto**:
-  - Modello
-  - Categoria
-  - Colore
-  - Aria condizionata
-  - Immagini
-  - Sconti (creazione, modifica, eliminazione; le auto scontate appaiono evidenziate nella homepage)
+    - Modello
+    - Categoria
+    - Colore
+    - Aria condizionata
+    - Immagini
+    - Sconti (creazione, modifica, eliminazione; le auto scontate appaiono evidenziate nella homepage)
+
 ---
 
 ## 🗂️ Architettura
 
 Il progetto è suddiviso in **5 app Django**:
 
-| App         | Descrizione                                      |
-|-------------|--------------------------------------------------|
-| `users`     | Gestione utenti, registrazione, profilo, login   |
-| `cars`      | Catalogo e gestione veicoli                      |
-| `bookings`  | Prenotazioni e gestione pagamenti                |
-| `contact`   | Modulo assistenza e sistema messaggistica        |
-| `pages`     | Homepage, pagine informative e navigazione       |
+| App        | Descrizione                                    |
+|------------|------------------------------------------------|
+| `users`    | Gestione utenti, registrazione, profilo, login |
+| `cars`     | Catalogo e gestione veicoli                    |
+| `bookings` | Prenotazioni e gestione pagamenti              |
+| `contact`  | Modulo assistenza e sistema messaggistica      |
+| `pages`    | Homepage, pagine informative e navigazione     |
 
 **User Model** esteso e personalizzato.
 
 ---
 
 ## 🔐 Gruppi e permessi
+
 - `Clienti`: assegnati automaticamente alla registrazione
 - `Amministratori`: accesso avanzato al backend e gestione
 
@@ -105,26 +114,41 @@ Il progetto è suddiviso in **5 app Django**:
 
 ## ⚙️ Setup locale
 
-1. Clona il repository:
+Questi sono i passaggi per configurare l'ambiente locale e avviare il progetto **DriveIsland**.
+
+### 1. Clona il repository:
+
+Per prima cosa, clona il repository del progetto sul tuo computer:
+
+  ```bash
+      git clone https://github.com/tuo-utente/driveisland.git
+      cd driveisland
+  ```
+
+### 2. Configura variabili in `.env.local`
+
+All'interno di questo file, aggiungi le seguenti variabili:
+
+1. Django Secret Key: Puoi generare una nuova chiave segreta per Django eseguendo il seguente comando:
+
 ```bash
-    git clone https://github.com/tuo-utente/driveisland.git
-    cd driveisland
+    python -c 'from django.core.management.utils import get_random_secret_key; print(get_random_secret_key())'
+```
+   Copia la chiave segreta generata e inseriscila nel file .env.local:
+
+```
+DJANGO_SECRET_KEY=la_tua_chiave_segreta
+```
+2. Aggiungi anche le altre variabili necessarie per la configurazione del progetto (le credenziali di terze parti, ecc.)
+   nel file .env.local.
+
+### 3. Esegui il server:
+
+```bash
+  python manage.py runserver
 ```
 
-2. Crea ambiente virtuale e installa le dipendenze:
-```bash
-    python -m venv env
-    source env/bin/activate
-    pip install -r requirements.txt
-```
-
-3. Configura variabili in `.env.local` 
-
-4. Esegui il server:
-
-```bash
-   python manage.py runserver
-```
+Il progetto sarà accessibile all'indirizzo: http://127.0.0.1:8000/.
 
 ---
 
@@ -157,6 +181,11 @@ Per accedere come amministratore, usa le seguenti credenziali effettuando il log
 Username: amministratore
 Password: ciao1234
 ```
+---
+
+## 📌 Nota
+Il file .env.local sarà fornito diirettamente al professore simone ricci via email, in data 10/07/2025
+
 ---
 
 ## 📄 Licenza
