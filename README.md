@@ -124,25 +124,53 @@ Per prima cosa, clona il repository del progetto sul tuo computer:
       git clone https://github.com/tuo-utente/driveisland.git
       cd driveisland
   ```
+### 2. Crea ambiente virtuale e installa le dipendenze:
 
-### 2. Configura variabili in `.env.local`
-
-All'interno di questo file, aggiungi le seguenti variabili:
-
-1. Django Secret Key: Puoi generare una nuova chiave segreta per Django eseguendo il seguente comando:
+Crea un ambiente virtuale e installa le dipendenze necessarie:
 
 ```bash
-    python -c 'from django.core.management.utils import get_random_secret_key; print(get_random_secret_key())'
+    python -m venv venv
+    source venv\Scripts\activate
+    pip install -r requirements.txt
 ```
-   Copia la chiave segreta generata e inseriscila nel file .env.local:
+  
+### 3. Configura variabili in `.env.local`
+Crea il file .env.local nella radice del progetto.
+All'interno di questo file, aggiungi le seguenti variabili:
+
+```bash
+  echo DEBUG=True > .env.local
+  
+  echo ALLOWED_HOSTS=127.0.0.1,localhost >> .env.local
+  echo SITE_DOMAIN=127.0.0.1:8000 >> .env.local
+  
+  echo DATABASE_URL=sqlite:///db.sqlite3 >> .env.local
+```
+
+ **Django Secret Key**: Puoi generare una nuova chiave segreta per Django eseguendo il seguente comando:
+
+```bash
+  python -c 'from django.core.management.utils import get_random_secret_key; print(get_random_secret_key())'
+```
+Copia la chiave segreta generata e inseriscila manualmente nel file .env.local:
 
 ```
 DJANGO_SECRET_KEY=la_tua_chiave_segreta
 ```
-2. Aggiungi anche le altre variabili necessarie per la configurazione del progetto (le credenziali di terze parti, ecc.)
-   nel file .env.local.
+Aggiungi manualmente anche le altre variabili necessarie per la configurazione del progetto nel file .env.local.
+```
+EMAIL_HOST_USER=la_tua_email@gmail.com >> .env.local
+EMAIL_HOST_PASSWORD=password_fornita_da gmail (diversa dalla password personale) >> .env.local
 
-### 3. Esegui il server:
+STRIPE_SECRET_KEY=
+STRIPE_PUBLIC_KEY=
+
+CLOUDINARY_CLOUD_NAME=
+CLOUDINARY_API_KEY=
+CLOUDINARY_API_SECRET
+```
+Reperibili registrandosi rispettivamente sui siti ufficiali di Gmail, Stripe e Cloudinary.
+### 4. Esegui il server:
 
 ```bash
   python manage.py runserver
@@ -184,7 +212,7 @@ Password: ciao1234
 ---
 
 ## 📌 Nota
-Il file .env.local sarà fornito diirettamente al professore simone ricci via email, in data 10/07/2025
+Il file .env.local sarà fornito direttamente al professore simone ricci via email, in data 10/07/2025
 
 ---
 
