@@ -118,7 +118,7 @@ Il progetto è suddiviso in **5 app Django**:
     pip install -r requirements.txt
 ```
 
-3. Configura variabili in `.env.local` (già presenti)
+3. Configura variabili in `.env.local` 
 
 4. Esegui il server:
 

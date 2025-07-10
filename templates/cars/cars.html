@@ -26,7 +26,7 @@
             {% if messages %}
                 {% for message in messages %}
                     {% if "admin_reply" not in message.tags %}
-                        <div class="alert {% if message.message == "Auto aggiornata con successo." %} alert-success {% else %} alert-danger {% endif %}">
+                        <div class="alert {% if message.message == "Auto aggiornata con successo." or "Auto eliminata con successo."  %} alert-success {% else %} alert-danger {% endif %}">
                             {{ message }}
                         </div>
                     {% endif %}
@@ -211,7 +211,7 @@
                             <div class="widget advanced-search2">
                                 <div class="mb-4 text-end">
                                     <a href="{% url 'add_car' %}" class="btn search-button btn-success d-block mx-auto"
-                                       style="background: #00aced">
+                                       style="background: #007bff">
                                         <i class="fa fa-plus me-1" style="margin-right: 10px"></i> Aggiungi nuova
                                         macchina
                                     </a>
