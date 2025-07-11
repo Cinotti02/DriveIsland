@@ -212,7 +212,7 @@ Password: ciao1234
 ---
 
 ## 📌 Nota
-Il file .env.local sarà fornito direttamente al professore simone ricci via email, in data 10/07/2025
+Il file .env.local sarà fornito direttamente al professore simone ricci via email, in data 11/07/2025
 
 ---
 
